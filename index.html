@@ -1,1714 +1,1418 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BaldeCash — Solicitud de Firma · Pagaré Nexsys</title>
-    <style>
-        :root {
-            --bg: #faf9f6;
-            --card: #ffffff;
-            --border: #e5e2dc;
-            --text: #2c2c2c;
-            --text-muted: #6b6560;
-            --accent: #8b7355;
-            --accent-dark: #6b5a42;
-            --green: #4a7c59;
-            --green-bg: #e8f0ea;
-            --yellow: #9a8632;
-            --yellow-bg: #f5f0d0;
-            --red: #9a4032;
-            --red-bg: #f5e0d0;
-            --blue-bg: #e8edf5;
-            --highlight: #f5f0e0;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            font-size: 16px;
-        }
-
-        .container {
-            max-width: 820px;
-            margin: 0 auto;
-            padding: 40px 24px 80px;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding-bottom: 40px;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 48px;
-        }
-
-        .header-label {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: 400;
-            line-height: 1.3;
-            margin-bottom: 8px;
-        }
-
-        .header .subtitle {
-            font-size: 16px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Version picker */
-        .picker {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 24px 26px;
-            margin-bottom: 40px;
-        }
-
-        .picker-title {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 14px;
-            font-weight: 600;
-        }
-
-        .picker-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .picker-btn {
-            background: var(--bg);
-            border: 1.5px solid var(--border);
-            border-radius: 6px;
-            padding: 14px 10px;
-            cursor: pointer;
-            text-align: left;
-            font-family: inherit;
-            transition: all 0.15s;
-        }
-
-        .picker-btn:hover {
-            border-color: var(--accent);
-            background: var(--highlight);
-        }
-
-        .picker-btn.active {
-            border-color: var(--accent);
-            background: var(--accent);
-            color: white;
-        }
-
-        .picker-btn-label {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .picker-btn-time {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-
-        /* Version content */
-        .version { display: none; }
-        .version.active { display: block; }
-
-        /* Sections */
-        section {
-            margin-bottom: 48px;
-        }
-
-        h2 {
-            font-size: 20px;
-            font-weight: 400;
-            margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        h3 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            margin-top: 24px;
-        }
-
-        h4 {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin: 20px 0 10px;
-        }
-
-        p {
-            margin-bottom: 14px;
-        }
-
-        strong {
-            font-weight: 600;
-        }
-
-        /* Flash / immediate callout */
-        .flash {
-            background: var(--card);
-            border-left: 4px solid var(--accent);
-            padding: 22px 26px;
-            margin: 24px 0;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .flash-label {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .flash-text {
-            font-size: 19px;
-            line-height: 1.45;
-            font-weight: 500;
-        }
-
-        .flash-num {
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        /* Callout box */
-        .callout {
-            background: var(--highlight);
-            border-left: 4px solid var(--accent);
-            padding: 20px 24px;
-            margin: 24px 0;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .callout.warn {
-            border-left-color: var(--yellow);
-            background: var(--yellow-bg);
-        }
-
-        .callout-label {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .callout.warn .callout-label {
-            color: var(--yellow);
-        }
-
-        .callout p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Recommendation block */
-        .recommendation {
-            background: var(--accent);
-            color: white;
-            padding: 22px 26px;
-            border-radius: 6px;
-            margin: 24px 0;
-        }
-
-        .recommendation .rec-label {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .recommendation .rec-text {
-            font-size: 17px;
-            line-height: 1.45;
-            font-weight: 500;
-        }
-
-        /* Metrics grid */
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 20px 0 28px;
-        }
-
-        .metric {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 16px 18px;
-        }
-
-        .metric-label {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .metric-value {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--accent);
-            line-height: 1.1;
-        }
-
-        .metric-sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 4px;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-        }
-
-        /* Tables */
-        .table-wrapper {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        thead th {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            text-align: left;
-            padding: 10px 12px;
-            border-bottom: 2px solid var(--border);
-            font-weight: 600;
-        }
-
-        tbody td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr.total-row td {
-            font-weight: 700;
-            border-top: 2px solid var(--border);
-            border-bottom: none;
-        }
-
-        td.num {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            text-align: right;
-        }
-
-        .status {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .status-active { background: var(--green-bg); color: var(--green); }
-        .status-offered { background: var(--yellow-bg); color: var(--yellow); }
-        .status-eval { background: var(--blue-bg); color: #4a6a9a; }
-        .status-sub { background: #f0e8e0; color: #8a6a4a; }
-
-        /* Key-value rows */
-        .kv-table td:first-child {
-            font-weight: 600;
-            width: 220px;
-            white-space: nowrap;
-        }
-
-        .kv-table td:last-child {
-            text-align: right;
-        }
-
-        /* Comparison table */
-        .comparison-table thead th:not(:first-child) {
-            text-align: center;
-        }
-        .comparison-table tbody td:not(:first-child) {
-            text-align: center;
-        }
-        .comparison-table tbody td:first-child {
-            font-weight: 600;
-        }
-        .comparison-table tbody tr.total-row td {
-            font-weight: 700;
-            border-top: 2px solid var(--border);
-            border-bottom: none;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin: 12px 0 16px 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        /* Expandable sections */
-        details {
-            margin: 16px 0;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        summary {
-            padding: 14px 18px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 15px;
-            background: var(--card);
-            user-select: none;
-            list-style: none;
-        }
-
-        summary::-webkit-details-marker { display: none; }
-
-        summary::before {
-            content: '\25B6';
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 11px;
-            transition: transform 0.2s;
-            color: var(--accent);
-        }
-
-        details[open] summary::before {
-            transform: rotate(90deg);
-        }
-
-        .details-content {
-            padding: 18px;
-            background: var(--card);
-            border-top: 1px solid var(--border);
-        }
-
-        /* Document buttons */
-        .doc-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .doc-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 18px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent);
-            border-radius: 0 6px 6px 0;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.15s;
-            flex: 1;
-            min-width: 240px;
-        }
-
-        .doc-btn:hover {
-            background: var(--highlight);
-            border-color: var(--accent);
-        }
-
-        .doc-btn.ref {
-            border-left-color: var(--text-muted);
-            color: var(--text-muted);
-        }
-
-        .doc-btn.ref:hover {
-            background: #f0ede6;
-        }
-
-        .doc-btn-icon {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .doc-btn-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .doc-btn-label {
-            font-size: 14px;
-        }
-
-        .doc-btn-sub {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            font-weight: 400;
-        }
-
-        /* Pagare appendix */
-        .pagare-box {
-            background: #f5f3ed;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 28px 32px;
-            margin: 24px 0;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .pagare-box h4 {
-            text-align: center;
-            font-size: 16px;
-            margin: 0 0 4px;
-            letter-spacing: 2px;
-            color: var(--text);
-        }
-
-        .pagare-box .pg-meta {
-            text-align: center;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .pagare-box .pg-section {
-            margin: 14px 0;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-        }
-
-        .pagare-box .pg-section:first-of-type {
-            border-top: 0;
-        }
-
-        .pagare-box .pg-section-title {
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .pagare-box .aval-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 12px;
-        }
-
-        .pagare-box .aval {
-            padding: 12px;
-            background: #ffffff;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .pagare-box .aval strong {
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        /* Form section */
-        .form-section {
-            background: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 36px 32px;
-            margin-top: 48px;
-        }
-
-        .form-section h2 {
-            border-bottom: none;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .form-question {
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 28px;
-            font-size: 15px;
-        }
-
-        /* Vote buttons */
-        .vote-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-
-        .vote-option {
-            position: relative;
-        }
-
-        .vote-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .vote-option label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            min-height: 90px;
-        }
-
-        .vote-option label:hover {
-            border-color: var(--accent);
-            background: var(--highlight);
-        }
-
-        .vote-icon {
-            font-size: 24px;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .vote-label {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .vote-option input[type="radio"]:checked + label.vote-approve {
-            border-color: var(--green);
-            background: var(--green-bg);
-            box-shadow: 0 0 0 1px var(--green);
-        }
-
-        .vote-option input[type="radio"]:checked + label.vote-reject {
-            border-color: var(--red);
-            background: var(--red-bg);
-            box-shadow: 0 0 0 1px var(--red);
-        }
-
-        /* Form fields */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .form-group textarea,
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-family: Georgia, serif;
-            font-size: 15px;
-            color: var(--text);
-            background: var(--bg);
-            resize: vertical;
-        }
-
-        .form-group textarea:focus,
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.15);
-        }
-
-        .form-group textarea {
-            min-height: 80px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 8px;
-        }
-
-        .submit-btn:hover {
-            background: var(--accent-dark);
-        }
-
-        .submit-btn:disabled {
-            background: #bbb;
-            cursor: not-allowed;
-        }
-
-        /* Success message */
-        .success-msg {
-            display: none;
-            text-align: center;
-            padding: 32px;
-        }
-
-        .success-msg .check {
-            font-size: 48px;
-            color: var(--green);
-            margin-bottom: 12px;
-        }
-
-        /* Note */
-        .note {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 60px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .container { padding: 24px 16px 60px; }
-            .header h1 { font-size: 22px; }
-            .picker-grid { grid-template-columns: repeat(2, 1fr); }
-            .metrics { grid-template-columns: 1fr; }
-            .vote-options { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-            table { font-size: 13px; }
-            .kv-table td:first-child { width: auto; }
-            .form-section { padding: 24px 18px; }
-            .doc-buttons { flex-direction: column; }
-            .pagare-box .aval-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memo &middot; Aval Solidario Nexsys &middot; BaldeCash</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-mute: #7a7a7a;
+    --paper: #fafaf7;
+    --paper-card: #ffffff;
+    --rule: #e5e3dc;
+    --rule-soft: #efede6;
+    --accent: #0f4c75;
+    --accent-soft: #e8eef3;
+    --warn: #8b4513;
+    --warn-soft: #f5ebe0;
+    --good: #2d5a3f;
+    --good-soft: #e3ede5;
+    --danger: #8b2c2c;
+    --danger-soft: #f0e3e3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Charter', 'Georgia', 'Iowan Old Style', serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+  .meta {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 40px 0 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  h3 {
+    font-size: 17px;
+    line-height: 1.3;
+    margin: 24px 0 10px;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 14px;
+    line-height: 1.3;
+    margin: 18px 0 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  p { margin: 0 0 14px; }
+  .subhead {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+  .rule {
+    height: 1px;
+    background: var(--rule);
+    margin: 32px 0;
+    border: 0;
+  }
+  ul, ol {
+    margin: 12px 0 16px 20px;
+  }
+  li {
+    margin-bottom: 8px;
+  }
+
+  /* Welcome screen */
+  .welcome {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 24px;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  .welcome.hidden {
+    display: none;
+  }
+  .welcome-inner {
+    max-width: 720px;
+    width: 100%;
+  }
+  .welcome-meta {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .welcome h1 {
+    text-align: center;
+    font-size: 32px;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .welcome-subhead {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 12px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .welcome-dirigido {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+    line-height: 1.5;
+  }
+  .welcome-dirigido strong {
+    color: var(--ink);
+    font-style: normal;
+  }
+  .welcome-prompt {
+    text-align: center;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 18px;
+  }
+  .welcome-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .welcome-option {
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 24px 22px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: all 0.18s;
+  }
+  .welcome-option:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-2px);
+  }
+  .welcome-option-time {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .welcome-option-label {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .welcome-option-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+  .welcome-footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-style: italic;
+  }
+
+  /* Floating version switcher */
+  .switcher {
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 0 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .switcher-label {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .switcher-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .switcher-btn {
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .switcher-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .switcher-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* version content */
+  .version { display: none; }
+  .version.active { display: block; }
+
+  /* immediate version */
+  .flash {
+    background: var(--paper-card);
+    border-left: 3px solid var(--accent);
+    padding: 22px 26px;
+    margin: 24px 0;
+  }
+  .flash-q {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 10px;
+  }
+  .flash-a {
+    font-size: 19px;
+    line-height: 1.45;
+    font-weight: 500;
+  }
+  .flash-num {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  ul.tight {
+    margin: 8px 0 14px;
+    padding-left: 20px;
+  }
+  ul.tight li {
+    margin-bottom: 6px;
+  }
+
+  /* tables */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px;
+    font-size: 14px;
+  }
+  .tbl th, .tbl td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .tbl th {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+    border-bottom: 1px solid var(--ink);
+  }
+  .tbl td.num {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    text-align: right;
+  }
+  .tbl tr.total td {
+    font-weight: 600;
+    border-bottom: 0;
+    border-top: 1px solid var(--ink);
+  }
+  .tag {
+    display: inline-block;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: var(--rule-soft);
+    color: var(--ink-soft);
+  }
+  .tag.good { background: var(--good-soft); color: var(--good); }
+  .tag.warn { background: var(--warn-soft); color: var(--warn); }
+  .tag.live { background: var(--accent-soft); color: var(--accent); }
+  .tag.eval { background: var(--rule-soft); color: var(--ink-soft); }
+
+  /* document buttons */
+  .doc-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0 4px;
+    flex-wrap: wrap;
+  }
+  .doc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+    flex: 1;
+    min-width: 240px;
+  }
+  .doc-btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .doc-btn.ref {
+    border-left-color: var(--ink-soft);
+    color: var(--ink-soft);
+  }
+  .doc-btn.ref:hover {
+    background: var(--rule-soft);
+  }
+  .doc-btn-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .doc-btn-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .doc-btn-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Charter', 'Georgia', serif;
+  }
+  .doc-btn-sub {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /* pagar&eacute; appendix */
+  .pagare {
+    background: #f5f3ed;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin: 24px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .pagare h4 {
+    text-align: center;
+    font-size: 16px;
+    margin: 0 0 4px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+  }
+  .pagare .pg-meta {
+    text-align: center;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .pagare .pg-section {
+    margin: 14px 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+  }
+  .pagare .pg-section:first-of-type {
+    border-top: 0;
+  }
+  .pagare .pg-section-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .pagare .aval-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .pagare .aval {
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  .pagare .aval strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Form section */
+  .form-section {
+    background: var(--paper-card);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 28px 30px;
+    margin: 40px 0 20px;
+  }
+  .form-section h3 {
+    margin-top: 0;
+    font-size: 18px;
+  }
+  .form-question {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .vote-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .vote-option {
+    position: relative;
+  }
+  .vote-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .vote-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-radius: 4px;
+    padding: 14px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.15s;
+    line-height: 1.3;
+    min-height: 70px;
+  }
+  .vote-option label:hover { border-color: var(--ink-soft); }
+  .vote-option input[type="radio"]:checked + label.vote-approve {
+    background: var(--good);
+    color: white;
+    border-color: var(--good);
+  }
+  .vote-option input[type="radio"]:checked + label.vote-reject {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+  }
+  .vote-icon {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Menlo', monospace;
+  }
+  .vote-label-text {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .form-group {
+    margin-bottom: 14px;
+  }
+  .form-group-label {
+    display: block;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 14px 0 6px;
+  }
+  .form-group textarea,
+  .form-group input[type="text"],
+  .form-group input[type="date"],
+  .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    background: var(--paper);
+    resize: vertical;
+    color: var(--ink);
+  }
+  .form-group textarea:focus,
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .form-group textarea {
+    min-height: 80px;
+  }
+  .form-row {
+    display: flex;
+    gap: 14px;
+    align-items: end;
+  }
+  .form-row .form-group {
+    flex: 1;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 14px;
+  }
+  .submit-btn:hover {
+    background: #0a3a5c;
+  }
+  .submit-btn:disabled {
+    background: #bbb;
+    cursor: not-allowed;
+  }
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 24px;
+  }
+  .success-msg .check {
+    font-size: 48px;
+    color: var(--good);
+    margin-bottom: 8px;
+  }
+  .success-msg h3 {
+    margin-bottom: 8px;
+  }
+  .success-msg .note {
+    font-size: 13px;
+    color: var(--ink-mute);
+    font-style: italic;
+    margin-top: 12px;
+  }
+
+  /* footnote */
+  .footnote {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* footer */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 24px 18px 60px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 19px; }
+    .welcome h1 { font-size: 24px; }
+    .welcome-options { grid-template-columns: 1fr; }
+    .welcome { padding: 24px 18px; }
+    .vote-options { grid-template-columns: 1fr; }
+    .pagare .aval-grid { grid-template-columns: 1fr; }
+    .form-row { flex-direction: column; }
+    .doc-buttons { flex-direction: column; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
 
-        <!-- HEADER -->
-        <header class="header">
-            <div class="header-label">Memor&aacute;ndum confidencial &middot; Avales firmantes</div>
-            <h1>Solicitud de firma &middot; Pagar&eacute; con aval solidario &mdash; Nexsys del Per&uacute;</h1>
-            <div class="subtitle">Balde K S.A.C. (BaldeCash) &middot; Lima, 11 de mayo de 2026 &middot; Dirigido a Eduardo De Las Casas y Mar&iacute;a Elena Arosamena &middot; Preparado por la Gerencia General y Gerencia de Finanzas</div>
-        </header>
-
-        <!-- VERSION PICKER -->
-        <div class="picker">
-            <div class="picker-title">Seleccione versi&oacute;n de lectura</div>
-            <div class="picker-grid">
-                <button class="picker-btn active" data-version="flash">
-                    <div class="picker-btn-label">Inmediata</div>
-                    <div class="picker-btn-time">15 segundos</div>
-                </button>
-                <button class="picker-btn" data-version="short">
-                    <div class="picker-btn-label">Corta</div>
-                    <div class="picker-btn-time">~2 minutos</div>
-                </button>
-                <button class="picker-btn" data-version="medium">
-                    <div class="picker-btn-label">Media</div>
-                    <div class="picker-btn-time">~5 minutos</div>
-                </button>
-                <button class="picker-btn" data-version="full">
-                    <div class="picker-btn-label">Completa</div>
-                    <div class="picker-btn-time">~10 minutos</div>
-                </button>
-            </div>
-        </div>
-
-        <!-- ========== VERSI&Oacute;N INMEDIATA ========== -->
-        <div class="version active" id="v-flash">
-
-            <div class="flash">
-                <div class="flash-label">El pedido</div>
-                <div class="flash-text">Aprobar firma del pagar&eacute; a favor de <strong>Nexsys del Per&uacute;</strong> por <span class="flash-num">US$200K</span> a 30 d&iacute;as, con aval solidario de los accionistas con participaci&oacute;n mayor al 10%.</div>
-            </div>
-
-            <div class="flash">
-                <div class="flash-label">Por qu&eacute; importa</div>
-                <ul>
-                    <li><strong>6 contrapartes incorporadas</strong> en 20 meses. Pasamos de US$50K (Ingram, sep 2024) a <strong>US$570K</strong> en l&iacute;neas aprobadas (incluyendo HP Finance US$100K para sublease); con BBVA en evaluaci&oacute;n, potencial de <strong>~US$1.37M</strong> (27x).</li>
-                    <li><strong>Diversifica fondeo operativo</strong> y construye historial con Nexsys para futura ampliaci&oacute;n.</li>
-                    <li><strong>Aval solidario es est&aacute;ndar de mercado.</strong> Ruben y Sandra ya firmaron uno similar con Ingram. Nuevo solo para los board members (De Las Casas y Arosamena). BBVA probablemente lo pedir&aacute; tambi&eacute;n.</li>
-                </ul>
-            </div>
-
-            <div class="callout warn">
-                <div class="callout-label">Puntos de atenci&oacute;n</div>
-                <p><strong>Aval solidario tiene precedente parcial.</strong> Ruben y Sandra ya firmaron un pagar&eacute; con aval solidario por la l&iacute;nea de Ingram Micro. Nexsys es la primera vez que se suma a los board members (De Las Casas, Arosamena). Peridot, HP Finance no pidieron aval; Deltron pidi&oacute; cheque de gerencia. Adem&aacute;s, el pagar&eacute; se firma con monto y vencimiento en blanco (est&aacute;ndar en l&iacute;neas rotativas) &mdash; riesgo topado al saldo deudor real, m&aacute;ximo US$200K.</p>
-            </div>
-
-            <div class="doc-buttons">
-                <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
-                    <span class="doc-btn-icon">&darr;</span>
-                    <span class="doc-btn-content">
-                        <span class="doc-btn-label">Pagar&eacute; solicitado por Nexsys</span>
-                        <span class="doc-btn-sub">Documento a aprobar</span>
-                    </span>
-                </a>
-                <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
-                    <span class="doc-btn-icon">&nearr;</span>
-                    <span class="doc-btn-content">
-                        <span class="doc-btn-label">Ver pagar&eacute; de referencia (Ingram)</span>
-                        <span class="doc-btn-sub">Firmado previamente</span>
-                    </span>
-                </a>
-            </div>
-
-            <div class="form-section">
-                <div id="form-container-flash">
-                    <h2>Su decisi&oacute;n</h2>
-                    <p class="form-question">&iquest;Aprueba firmar el pagar&eacute; con Nexsys del Per&uacute; por US$200K como aval solidario?</p>
-                    <form class="decision-form">
-                        <div class="vote-options">
-                            <div class="vote-option">
-                                <input type="radio" id="approve-flash" name="vote" value="Apruebo" required>
-                                <label for="approve-flash" class="vote-approve">
-                                    <span class="vote-icon">&#10003;</span>
-                                    <span class="vote-label">Apruebo</span>
-                                </label>
-                            </div>
-                            <div class="vote-option">
-                                <input type="radio" id="reject-flash" name="vote" value="No apruebo">
-                                <label for="reject-flash" class="vote-reject">
-                                    <span class="vote-icon">&#10007;</span>
-                                    <span class="vote-label">No apruebo</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="comments-flash">Comentarios o condiciones</label>
-                            <textarea id="comments-flash" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condici&oacute;n o consideraci&oacute;n a su voto"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name-flash">Nombre</label>
-                                <select id="name-flash" name="name" required>
-                                    <option value="" disabled selected>Seleccione su nombre</option>
-                                    <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
-                                    <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
-                                    <option value="Mar&iacute;a Elena Arosamena Badani">Mar&iacute;a Elena Arosamena Badani</option>
-                                    <option value="Eduardo Jos&eacute; De Las Casas Figallo">Eduardo Jos&eacute; De Las Casas Figallo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="date-flash">Fecha</label>
-                                <input type="date" id="date-flash" name="date">
-                            </div>
-                        </div>
-                        <button type="submit" class="submit-btn">Registrar voto</button>
-                    </form>
-                </div>
-                <div class="success-msg">
-                    <div class="check">&#10003;</div>
-                    <h3>Voto registrado</h3>
-                    <p class="success-detail"></p>
-                    <p class="note" style="margin-top:16px;">Su voto ha sido registrado exitosamente.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========== VERSI&Oacute;N CORTA ========== -->
-        <div class="version" id="v-short">
-
-            <section>
-                <h2>Resumen ejecutivo</h2>
-
-                <div class="recommendation">
-                    <div class="rec-label">Recomendaci&oacute;n</div>
-                    <div class="rec-text">Aprobar la firma del pagar&eacute; con Nexsys del Per&uacute; por <strong>US$200K a 30 d&iacute;as</strong>, con aval solidario de los accionistas con participaci&oacute;n mayor al 10%.</div>
-                </div>
-
-                <div class="metrics">
-                    <div class="metric">
-                        <div class="metric-label">L&iacute;nea antes</div>
-                        <div class="metric-value">US$50K</div>
-                        <div class="metric-sub">Sep 2024 &middot; solo Ingram</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Hoy + aprobado</div>
-                        <div class="metric-value">US$570K</div>
-                        <div class="metric-sub">May 2026 &middot; 4 contrapartes</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Con Nexsys + BBVA</div>
-                        <div class="metric-value">~US$1.37M</div>
-                        <div class="metric-sub">27x en 20 meses</div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>Los tres puntos centrales</h3>
-
-                <p><strong>1. La iniciativa de l&iacute;neas est&aacute; funcionando.</strong> Tras la capitalizaci&oacute;n v&iacute;a acciones preferentes Clase B en diciembre 2025, el patrimonio se fortaleci&oacute; significativamente y la empresa registr&oacute; por primera vez un a&ntilde;o con utilidad neta consistente. En 20 meses pasamos de una sola l&iacute;nea peque&ntilde;a (Ingram, US$50K en sep 2024) a tener Ingram US$200K + Peridot US$250K + Deltron US$20K + HP Finance US$100K aprobada por ejecutar, con Nexsys ofreciendo US$200K adicionales y BBVA evaluando una l&iacute;nea bancaria de ~US$600K a 24 meses.</p>
-
-                <p><strong>2. Nexsys es un proveedor target genuino.</strong> Es uno de los top players del mercado peruano de mayoristas con llegada directa a las marcas. Las dos razones sustantivas: <em>(a)</em> <strong>diversificaci&oacute;n de fondeo operativo</strong> en un mercado altamente concentrado; y <em>(b)</em> <strong>fit de tama&ntilde;o</strong> &mdash; somos un cliente material para Nexsys, lo que se traduce en mejor atenci&oacute;n y conexiones estrat&eacute;gicas reales (ya nos conectaron con NVIDIA y nos han dado referencias en el ecosistema).</p>
-
-                <p><strong>3. El aval solidario tiene precedente parcial.</strong> Ruben y Sandra ya firmaron un pagar&eacute; con aval solidario para la l&iacute;nea de Ingram Micro &mdash; la estructura no es nueva para ellos. Lo que s&iacute; es nuevo es que se suman los board members De Las Casas y Arosamena. La raz&oacute;n: en septiembre 2024, cuando se firm&oacute; Ingram, ambos manten&iacute;an su participaci&oacute;n bajo forma de notas convertibles, no de acciones, por lo que no calificaban como avales obligados bajo el threshold del 10%. Posteriormente esas notas se convirtieron a acciones. Peridot otorg&oacute; sin aval; HP Finance aprob&oacute; sin sustento adicional; Deltron pidi&oacute; cheque de gerencia. BBVA probablemente pedir&aacute; aval tambi&eacute;n.</p>
-            </section>
-
-            <div class="callout warn">
-                <div class="callout-label">Riesgo a tener en cuenta</div>
-                <p>El pagar&eacute; se firma con campos de monto y vencimiento en blanco (cl&aacute;usula de completaci&oacute;n). Es est&aacute;ndar en l&iacute;neas rotativas, pero significa que Nexsys puede completarlo seg&uacute;n el saldo deudor al momento del incumplimiento. La exposici&oacute;n m&aacute;xima est&aacute; topada por la l&iacute;nea (US$200K) m&aacute;s intereses moratorios.</p>
-            </div>
-
-            <p class="note">El detalle completo del contexto, las contrapartes, las cifras del antes/despu&eacute;s, el an&aacute;lisis del aval solidario y el pagar&eacute; &iacute;ntegro est&aacute;n en la versi&oacute;n media y completa de este memo.</p>
-
-            <div class="doc-buttons">
-                <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
-                    <span class="doc-btn-icon">&darr;</span>
-                    <span class="doc-btn-content">
-                        <span class="doc-btn-label">Pagar&eacute; solicitado por Nexsys</span>
-                        <span class="doc-btn-sub">Documento a aprobar</span>
-                    </span>
-                </a>
-                <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
-                    <span class="doc-btn-icon">&nearr;</span>
-                    <span class="doc-btn-content">
-                        <span class="doc-btn-label">Ver pagar&eacute; de referencia (Ingram)</span>
-                        <span class="doc-btn-sub">Firmado previamente</span>
-                    </span>
-                </a>
-            </div>
-
-            <div class="form-section">
-                <div id="form-container-short">
-                    <h2>Su decisi&oacute;n</h2>
-                    <p class="form-question">&iquest;Aprueba firmar el pagar&eacute; con Nexsys del Per&uacute; por US$200K como aval solidario?</p>
-                    <form class="decision-form">
-                        <div class="vote-options">
-                            <div class="vote-option">
-                                <input type="radio" id="approve-short" name="vote" value="Apruebo" required>
-                                <label for="approve-short" class="vote-approve">
-                                    <span class="vote-icon">&#10003;</span>
-                                    <span class="vote-label">Apruebo</span>
-                                </label>
-                            </div>
-                            <div class="vote-option">
-                                <input type="radio" id="reject-short" name="vote" value="No apruebo">
-                                <label for="reject-short" class="vote-reject">
-                                    <span class="vote-icon">&#10007;</span>
-                                    <span class="vote-label">No apruebo</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="comments-short">Comentarios o condiciones</label>
-                            <textarea id="comments-short" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condici&oacute;n o consideraci&oacute;n a su voto"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name-short">Nombre</label>
-                                <select id="name-short" name="name" required>
-                                    <option value="" disabled selected>Seleccione su nombre</option>
-                                    <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
-                                    <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
-                                    <option value="Mar&iacute;a Elena Arosamena Badani">Mar&iacute;a Elena Arosamena Badani</option>
-                                    <option value="Eduardo Jos&eacute; De Las Casas Figallo">Eduardo Jos&eacute; De Las Casas Figallo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="date-short">Fecha</label>
-                                <input type="date" id="date-short" name="date">
-                            </div>
-                        </div>
-                        <button type="submit" class="submit-btn">Registrar voto</button>
-                    </form>
-                </div>
-                <div class="success-msg">
-                    <div class="check">&#10003;</div>
-                    <h3>Voto registrado</h3>
-                    <p class="success-detail"></p>
-                    <p class="note" style="margin-top:16px;">Su voto ha sido registrado exitosamente.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========== VERSI&Oacute;N MEDIA ========== -->
-        <div class="version" id="v-medium">
-
-            <section>
-                <h2>1 &middot; Antecedentes y contexto</h2>
-                <p>A septiembre de 2024, BaldeCash operaba con una &uacute;nica l&iacute;nea de cr&eacute;dito de proveedor: Ingram Micro, por US$50K a 45 d&iacute;as, firmada con aval solidario de Ruben y Sandra. El fondeo principal del portfolio ven&iacute;a de bonos corporativos y mutuos con personas naturales &mdash; estructura que funcionaba para alcanzar la escala actual pero limitaba el crecimiento, concentraba riesgo de refinanciamiento, no inclu&iacute;a contrapartes institucionales que diversifiquen el fondeo, y nos expon&iacute;a a costos de capital m&aacute;s altos.</p>
-                <p>Durante 2025 ejecutamos una agenda dirigida a calificar para l&iacute;neas adicionales: (i) capitalizaci&oacute;n v&iacute;a emisi&oacute;n de acciones preferentes Clase B en diciembre 2025, (ii) migraci&oacute;n contable de arrendamiento operativo a financiero, (iii) preparaci&oacute;n de informaci&oacute;n financiera consistente y un memor&aacute;ndum de inversi&oacute;n profesional, (iv) cierre del a&ntilde;o con utilidad neta consistente por primera vez.</p>
-            </section>
-
-            <section>
-                <h2>2 &middot; Resultados de la iniciativa</h2>
-
-                <h3>Contrapartes y status</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th>Contraparte</th><th>L&iacute;nea</th><th>Plazo</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Ingram Micro</td><td class="num">US$200K</td><td>45 d&iacute;as</td><td><span class="status status-active">Activa &middot; ampliada 4x</span></td></tr>
-                            <tr><td>Peridot (+ Ingram)</td><td class="num">US$250K</td><td>75 d&iacute;as</td><td><span class="status status-active">Activa &middot; abr 2026</span></td></tr>
-                            <tr><td>Deltron</td><td class="num">US$20K</td><td>30 d&iacute;as</td><td><span class="status status-sub">Activa &middot; pendiente ampliaci&oacute;n</span></td></tr>
-                            <tr><td>HP Finance</td><td class="num">US$100K</td><td>Leasing</td><td><span class="status status-active">Aprobada &middot; por ejecutar</span></td></tr>
-                            <tr><td><strong>Nexsys del Per&uacute;</strong></td><td class="num"><strong>US$200K</strong></td><td>30 d&iacute;as</td><td><span class="status status-offered">Ofrecida &middot; pendiente firma</span></td></tr>
-                            <tr><td>BBVA (banco)</td><td class="num">~US$600K</td><td>24 meses</td><td><span class="status status-eval">En evaluaci&oacute;n</span></td></tr>
-                            <tr><td>Compudiskette</td><td class="num">TBD</td><td>&mdash;</td><td><span class="status status-eval">Conversaci&oacute;n avanzada</span></td></tr>
-                            <tr class="total-row"><td><strong>Total activo + aprobado + ofrecido</strong></td><td class="num"><strong>US$770K</strong></td><td colspan="2"><strong>Con BBVA: hasta ~US$1.37M</strong></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3>Antes vs. despu&eacute;s</h3>
-                <div class="metrics">
-                    <div class="metric">
-                        <div class="metric-label">L&iacute;neas sep 2024</div>
-                        <div class="metric-value">US$50K</div>
-                        <div class="metric-sub">1 contraparte</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Hoy + aprobado</div>
-                        <div class="metric-value">US$570K</div>
-                        <div class="metric-sub">4 contrapartes</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Potencial 2026</div>
-                        <div class="metric-value">~US$1.37M</div>
-                        <div class="metric-sub">+ Nexsys + BBVA</div>
-                    </div>
-                </div>
-
-                <p>Sobre el costo de fondeo: <strong>las l&iacute;neas de proveedor s&iacute; generan ahorro</strong> (cada d&oacute;lar de l&iacute;nea de proveedor a 30&ndash;45 d&iacute;as desplaza un d&oacute;lar de bono o mutuo a tasas materialmente m&aacute;s altas). En contraste, <strong>BBVA ser&iacute;a m&aacute;s caro que nuestro fondeo actual</strong> (estimamos 20&ndash;22% vs. costo medio actual de ~15% en mercados privados), pero estrat&eacute;gicamente importante: tener una l&iacute;nea bancaria a 24 meses introduce una contraparte institucional, extiende duraci&oacute;n, y reduce riesgo de refinanciamiento concentrado. La l&oacute;gica es diversificar e institucionalizar la estructura de fondeo, no abaratarla.</p>
-            </section>
-
-            <section>
-                <h2>3 &middot; Caso Nexsys del Per&uacute;</h2>
-
-                <h3>Qui&eacute;n es y qu&eacute; representa en el mercado</h3>
-                <p>Nexsys del Per&uacute; S.R.L. (RUC 20470145901) es uno de los top players del mercado peruano de mayoristas de tecnolog&iacute;a, con presencia regional latinoamericana y llegada directa con las marcas principales. En YTD 2026 participa con aproximadamente 10% del volumen. El mercado est&aacute; concentrado en Ingram Micro (~48%) y Deltron (~29%), con el resto distribuido entre Nexsys, Compudiskette, Intcomex, Maxima y otros.</p>
-
-                <h3>Por qu&eacute; tomarla</h3>
-                <p><strong>Raz&oacute;n principal 1 &middot; Diversificaci&oacute;n de fondeo operativo.</strong> El mercado peruano de mayoristas est&aacute; altamente concentrado. Depender de uno o dos proveedores expone a BaldeCash a riesgos operativos relevantes ante restricciones de stock, cambios de precios, o cualquier disrupci&oacute;n de los proveedores dominantes.</p>
-                <p><strong>Raz&oacute;n principal 2 &middot; Fit de tama&ntilde;o: somos un cliente relevante.</strong> Al no ser un mayorista de la escala de Ingram, Nexsys nos trata como una cuenta material. Nexsys ya nos ha conectado con NVIDIA y nos ha proporcionado referencias relevantes &mdash; algo que un mayorista grande dif&iacute;cilmente har&iacute;a por una cuenta de nuestro tama&ntilde;o.</p>
-                <p><strong>Efectos positivos adicionales.</strong> Firmar esta l&iacute;nea tambi&eacute;n <em>(i)</em> construye historial con Nexsys para ampliaciones futuras, y <em>(ii)</em> aporta credibilidad ante BBVA y otras contrapartes.</p>
-            </section>
-
-            <section>
-                <h2>4 &middot; Aval solidario &middot; qu&eacute; implica</h2>
-                <p><strong>Qu&eacute; firma cada aval.</strong> Los accionistas con participaci&oacute;n mayor al 10% se constituyen en avales solidarios permanentes con renuncia expresa al beneficio de excusi&oacute;n. Si BaldeCash no paga, Nexsys puede ir contra cualquiera de los avales directamente. Es una garant&iacute;a solidaria, incondicional, irrevocable, por plazo indefinido.</p>
-                <p><strong>Por qu&eacute; se firma as&iacute;.</strong> Es est&aacute;ndar en Per&uacute; para empresas con menos de 5 a&ntilde;os. <em>Ruben y Sandra ya firmaron un pagar&eacute; con aval solidario para Ingram Micro</em> (link abajo). Lo nuevo es la incorporaci&oacute;n de De Las Casas y Arosamena: en septiembre 2024, cuando se firm&oacute; Ingram, ambos manten&iacute;an su participaci&oacute;n como notas convertibles, no acciones, por lo que no calificaban bajo el threshold del 10%. Posteriormente las notas se convirtieron a acciones.</p>
-                <p><strong>Magnitud del riesgo personal.</strong> Exposici&oacute;n m&aacute;xima = US$200K + intereses moratorios y costas. Mitigado por flujo de caja recurrente, inventario y CxC como respaldo, y plazo corto (30 d&iacute;as).</p>
-
-                <div class="callout warn">
-                    <div class="callout-label">Punto t&eacute;cnico sobre el pagar&eacute;</div>
-                    <p>El pagar&eacute; se firma con campos de monto y fecha de vencimiento en blanco &mdash; cl&aacute;usula de completaci&oacute;n est&aacute;ndar en l&iacute;neas rotativas. Nexsys se obliga a completarlo conforme al saldo deudor real al momento de cobranza. La exposici&oacute;n m&aacute;xima est&aacute; topada por la l&iacute;nea (US$200K).</p>
-                </div>
-            </section>
-
-            <section>
-                <h2>5 &middot; Recomendaci&oacute;n</h2>
-                <div class="recommendation">
-                    <div class="rec-label">Recomendaci&oacute;n</div>
-                    <div class="rec-text">Aprobar la firma del pagar&eacute; con Nexsys del Per&uacute; S.R.L. por US$200K a 30 d&iacute;as, con aval solidario de los accionistas Ruben Montenegro Lee, Eduardo De Las Casas Figallo, Mar&iacute;a Elena Arosamena Badani y Sandra Bianco Roa.</div>
-                </div>
-            </section>
-
-            <div class="doc-buttons">
-                <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
-                    <span class="doc-btn-icon">&darr;</span>
-                    <span class="doc-btn-content">
-                        <span class="doc-btn-label">Pagar&eacute; solicitado por Nexsys</span>
-                        <span class="doc-btn-sub">Documento a aprobar</span>
-                    </span>
-                </a>
-                <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
-                    <span class="doc-btn-icon">&nearr;</span>
-                    <span class="doc-btn-content">
-                        <span class="doc-btn-label">Ver pagar&eacute; de referencia (Ingram)</span>
-                        <span class="doc-btn-sub">Firmado previamente</span>
-                    </span>
-                </a>
-            </div>
-
-            <div class="form-section">
-                <div id="form-container-medium">
-                    <h2>Su decisi&oacute;n</h2>
-                    <p class="form-question">&iquest;Aprueba firmar el pagar&eacute; con Nexsys del Per&uacute; por US$200K como aval solidario?</p>
-                    <form class="decision-form">
-                        <div class="vote-options">
-                            <div class="vote-option">
-                                <input type="radio" id="approve-medium" name="vote" value="Apruebo" required>
-                                <label for="approve-medium" class="vote-approve">
-                                    <span class="vote-icon">&#10003;</span>
-                                    <span class="vote-label">Apruebo</span>
-                                </label>
-                            </div>
-                            <div class="vote-option">
-                                <input type="radio" id="reject-medium" name="vote" value="No apruebo">
-                                <label for="reject-medium" class="vote-reject">
-                                    <span class="vote-icon">&#10007;</span>
-                                    <span class="vote-label">No apruebo</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="comments-medium">Comentarios o condiciones</label>
-                            <textarea id="comments-medium" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condici&oacute;n o consideraci&oacute;n a su voto"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name-medium">Nombre</label>
-                                <select id="name-medium" name="name" required>
-                                    <option value="" disabled selected>Seleccione su nombre</option>
-                                    <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
-                                    <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
-                                    <option value="Mar&iacute;a Elena Arosamena Badani">Mar&iacute;a Elena Arosamena Badani</option>
-                                    <option value="Eduardo Jos&eacute; De Las Casas Figallo">Eduardo Jos&eacute; De Las Casas Figallo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="date-medium">Fecha</label>
-                                <input type="date" id="date-medium" name="date">
-                            </div>
-                        </div>
-                        <button type="submit" class="submit-btn">Registrar voto</button>
-                    </form>
-                </div>
-                <div class="success-msg">
-                    <div class="check">&#10003;</div>
-                    <h3>Voto registrado</h3>
-                    <p class="success-detail"></p>
-                    <p class="note" style="margin-top:16px;">Su voto ha sido registrado exitosamente.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========== VERSI&Oacute;N COMPLETA ========== -->
-        <div class="version" id="v-full">
-
-            <section>
-                <h2>1 &middot; Antecedentes</h2>
-
-                <h3>Punto de partida (septiembre 2024)</h3>
-                <p>A septiembre de 2024, BaldeCash operaba con un perfil financiero limitante: una &uacute;nica l&iacute;nea de cr&eacute;dito de proveedor (Ingram Micro, US$50K a 45 d&iacute;as, firmada con aval solidario de Ruben y Sandra), patrimonio limitado, y fondeo principal del portfolio originado en bonos corporativos y mutuos con personas naturales. El portfolio crec&iacute;a pero la estructura de fondeo creaba tres problemas: (i) ausencia total de contrapartes institucionales, (ii) duraci&oacute;n corta vs. el plazo natural del portfolio (24 meses), generando refinanciamiento continuo, y (iii) concentraci&oacute;n de riesgo de refinanciamiento.</p>
-
-                <h3>Acciones tomadas para reforzar el balance</h3>
-                <p><strong>Capitalizaci&oacute;n v&iacute;a acciones preferentes Clase B.</strong> En diciembre 2025 emitimos acciones preferentes Clase B (sin derecho a voto), suscritas por tres accionistas existentes &mdash; Eduardo De Las Casas, Mar&iacute;a Elena Arosamena y Enrique Castellanos. Esto fortaleci&oacute; significativamente el patrimonio y mejor&oacute; los ratios financieros que las contrapartes utilizan para evaluar l&iacute;neas.</p>
-                <p><strong>Migraci&oacute;n contable de arrendamiento operativo a financiero.</strong> El cambio de tratamiento refleja mejor la naturaleza del negocio (financiamiento, no alquiler) y mejora la presentaci&oacute;n de ratios financieros. Espec&iacute;ficamente: m&aacute;rgenes brutos suben de 32.9% a 55.1% bajo el m&eacute;todo nuevo, sin cambio en el flujo econ&oacute;mico real.</p>
-                <p><strong>Primer a&ntilde;o con utilidad neta consistente.</strong> En 2025 cerramos por primera vez con utilidad neta consistente, lo que combinado con el aumento de patrimonio hace que los ratios clave que eval&uacute;an contrapartes (debt/equity, leverage, cobertura de intereses) sean defendibles por primera vez.</p>
-                <p><strong>Preparaci&oacute;n de informaci&oacute;n financiera profesional.</strong> Preparamos un memor&aacute;ndum de inversi&oacute;n con la profundidad y formato que esperan las contrapartes institucionales. Esto elimin&oacute; la fricci&oacute;n inicial en cada conversaci&oacute;n nueva.</p>
-            </section>
-
-            <section>
-                <h2>2 &middot; Mapa de contrapartes y resultados a la fecha</h2>
-
-                <h3>Detalle por contraparte</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th>Contraparte</th><th>Tipo</th><th>L&iacute;nea</th><th>Plazo</th><th>Inicio</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Ingram Micro</td>
-                                <td>Mayorista #1 (~48% share)</td>
-                                <td class="num">US$200K</td>
-                                <td>45 d</td>
-                                <td>Sep 2024</td>
-                                <td><span class="status status-active">Activa</span></td>
-                            </tr>
-                            <tr>
-                                <td>Peridot + Ingram</td>
-                                <td>Fondo extranjero + mayorista</td>
-                                <td class="num">US$250K</td>
-                                <td>75 d</td>
-                                <td>Abr 2026</td>
-                                <td><span class="status status-active">Activa</span></td>
-                            </tr>
-                            <tr>
-                                <td>Deltron</td>
-                                <td>Mayorista #2 (~29% share)</td>
-                                <td class="num">US$20K</td>
-                                <td>30 d</td>
-                                <td>2025</td>
-                                <td><span class="status status-sub">Activa &middot; sub&oacute;ptima</span></td>
-                            </tr>
-                            <tr>
-                                <td>HP Finance</td>
-                                <td>Brazo financiero de fabricante &middot; leasing</td>
-                                <td class="num">US$100K</td>
-                                <td>Leasing</td>
-                                <td>2026</td>
-                                <td><span class="status status-active">Aprobada &middot; por ejecutar</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Nexsys</strong></td>
-                                <td>Mayorista mediano (~10% share)</td>
-                                <td class="num"><strong>US$200K</strong></td>
-                                <td>30 d</td>
-                                <td>Pendiente</td>
-                                <td><span class="status status-offered">Ofrecida</span></td>
-                            </tr>
-                            <tr>
-                                <td>BBVA</td>
-                                <td>Banco &middot; l&iacute;nea capital trabajo</td>
-                                <td class="num">~US$600K</td>
-                                <td>24 meses</td>
-                                <td>&mdash;</td>
-                                <td><span class="status status-eval">Evaluaci&oacute;n</span></td>
-                            </tr>
-                            <tr>
-                                <td>Compudiskette</td>
-                                <td>Mayorista en expansi&oacute;n (M&amp;A reciente)</td>
-                                <td class="num">TBD</td>
-                                <td>&mdash;</td>
-                                <td>&mdash;</td>
-                                <td><span class="status status-eval">Conversaci&oacute;n avanzada</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3>Notas sobre cada contraparte</h3>
-                <p><strong>Ingram Micro</strong> es nuestro mayorista principal &mdash; concentra ~80% de las compras hist&oacute;ricas. La l&iacute;nea inicial fue <strong>US$50K firmada en septiembre 2024 a 45 d&iacute;as</strong>, que se fue escalando: ampliada a US$150K en 2025 y a US$200K en 2026. Importante: este pagar&eacute; fue firmado con aval solidario de Ruben Montenegro y Sandra Bianco &mdash; la estructura legal que Nexsys est&aacute; pidiendo replica exactamente la que ya est&aacute; vigente con Ingram.</p>
-                <p><strong>Peridot</strong> es un fondo de inversi&oacute;n extranjero que opera en alianza con Ingram Micro. La l&iacute;nea de US$250K otorgada en abril 2026 representa el primer fondeo institucional internacional. Peridot otorg&oacute; la l&iacute;nea sin garant&iacute;as personales: la evaluaci&oacute;n se bas&oacute; exclusivamente en la revisi&oacute;n de informaci&oacute;n financiera.</p>
-                <p><strong>Deltron</strong> es el #2 del mercado y, parad&oacute;jicamente, donde m&aacute;s d&eacute;bil es nuestra posici&oacute;n. No pasamos su proceso de evaluaci&oacute;n crediticia tradicional y nos otorgaron una l&iacute;nea simb&oacute;lica de US$20K. Necesitamos forzar una re-evaluaci&oacute;n.</p>
-                <p><strong>HP Finance</strong> es una l&iacute;nea aprobada por US$100K a&uacute;n no ejecutada. Es estructuralmente distinta: no es l&iacute;nea de capital de trabajo, sino leasing financiero de equipos HP para sublease a estudiantes. HP no pidi&oacute; sustento crediticio adicional para aprobarla.</p>
-                <p><strong>BBVA</strong> es la conversaci&oacute;n m&aacute;s ambiciosa: ~US$600K a 24 meses. Importante: <strong>BBVA ser&iacute;a m&aacute;s caro que nuestro fondeo actual</strong> &mdash; estimamos 20&ndash;22% vs. ~15% actual. La raz&oacute;n estrat&eacute;gica no es ahorro sino <strong>institucionalizaci&oacute;n y escalabilidad</strong>: extiende duraci&oacute;n, reduce riesgo de refinanciamiento, e introduce contraparte institucional. Es deuda m&aacute;s cara pero estructuralmente superior.</p>
-                <p><strong>Compudiskette</strong> ha crecido significativamente v&iacute;a M&amp;A en los &uacute;ltimos meses. Es una contraparte estrat&eacute;gicamente relevante y estamos en conversaci&oacute;n avanzada.</p>
-            </section>
-
-            <section>
-                <h2>3 &middot; Antes vs. despu&eacute;s &middot; evaluaci&oacute;n cuantitativa</h2>
-                <div class="table-wrapper">
-                    <table class="comparison-table">
-                        <thead>
-                            <tr><th></th><th>Sep 2024</th><th>Hoy + aprobado</th><th>Con Nexsys + BBVA</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>L&iacute;neas de proveedor (capital de trabajo)</td>
-                                <td>US$50K</td>
-                                <td>US$470K</td>
-                                <td><strong>US$670K</strong></td>
-                            </tr>
-                            <tr>
-                                <td>L&iacute;nea de leasing (HP Finance)</td>
-                                <td>&mdash;</td>
-                                <td>US$100K</td>
-                                <td>US$100K</td>
-                            </tr>
-                            <tr>
-                                <td>L&iacute;neas bancarias</td>
-                                <td>&mdash;</td>
-                                <td>&mdash;</td>
-                                <td>~US$600K</td>
-                            </tr>
-                            <tr>
-                                <td>N&deg; de contrapartes</td>
-                                <td>1</td>
-                                <td>4</td>
-                                <td>6</td>
-                            </tr>
-                            <tr class="total-row">
-                                <td>Total l&iacute;nea disponible</td>
-                                <td><strong>US$50K</strong></td>
-                                <td><strong>US$570K</strong></td>
-                                <td><strong>~US$1.37M</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p class="note">HP Finance (US$100K) aprobada por ejecutar. El &ldquo;hoy&rdquo; excluye Nexsys (US$200K) pendiente de firma. Ingram escal&oacute; de US$50K (sep 2024) &rarr; US$150K (2025) &rarr; US$200K (2026).</p>
-
-                <h3>Efecto sobre el costo y la estructura de fondeo</h3>
-                <ul>
-                    <li><strong>L&iacute;neas de proveedor &rarr; ahorro directo de costo.</strong> Cada d&oacute;lar de l&iacute;nea de proveedor a 30&ndash;45 d&iacute;as desplaza un d&oacute;lar de bono o mutuo a tasas materialmente m&aacute;s altas.</li>
-                    <li><strong>Crecimiento sin fondeo adicional caro.</strong> El portfolio crece financiado por l&iacute;neas m&aacute;s baratas, mejorando margen operativo.</li>
-                    <li><strong>BBVA &rarr; costo adicional a cambio de duraci&oacute;n e institucionalizaci&oacute;n.</strong> BBVA <em>no</em> ser&iacute;a ahorro de costo (20&ndash;22% vs. ~15% actual). Extiende duraci&oacute;n (24 meses vs. ~12 meses bullet en bonos), reduce riesgo de refinanciamiento concentrado. Pagamos un spread por institucionalizar la estructura.</li>
-                </ul>
-                <p class="note">La Gerencia de Finanzas trabajar&aacute; una cuantificaci&oacute;n precisa del ahorro en l&iacute;neas de proveedor al cierre de mayo 2026.</p>
-            </section>
-
-            <section>
-                <h2>4 &middot; Caso Nexsys del Per&uacute; &middot; an&aacute;lisis detallado</h2>
-
-                <h3>4.1 Qui&eacute;n es Nexsys y su posici&oacute;n en el mercado</h3>
-                <p>Nexsys del Per&uacute; S.R.L. (RUC 20470145901) es uno de los top players del mercado peruano de mayoristas de tecnolog&iacute;a, con presencia regional latinoamericana y llegada directa con las principales marcas. En YTD 2026 participa con aproximadamente 10% del volumen de importaciones. El mercado est&aacute; concentrado en Ingram Micro (~48%) y Deltron (~29%).</p>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th>Mayorista</th><th>YTD 2026 (S/MM)</th><th>Share</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Ingram Micro</td><td class="num">4.45</td><td class="num">48.2%</td></tr>
-                            <tr><td>Deltron</td><td class="num">2.69</td><td class="num">29.2%</td></tr>
-                            <tr><td>Nexsys</td><td class="num">0.93</td><td class="num">10.1%</td></tr>
-                            <tr><td>Otros (Compudiskette, Intcomex, Maxima, etc.)</td><td class="num">1.16</td><td class="num">12.5%</td></tr>
-                            <tr class="total-row"><td><strong>Total mercado</strong></td><td class="num"><strong>9.24</strong></td><td class="num"><strong>100%</strong></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p class="note">Fuente: data de importaciones por mayorista (acumulado YTD 2026). Compudiskette ha crecido significativamente v&iacute;a M&amp;A; cerr&oacute; 2025 por encima de Nexsys, hoy YTD 2026 est&aacute; ligeramente debajo.</p>
-
-                <h3>4.2 T&eacute;rminos de la l&iacute;nea ofrecida</h3>
-                <div class="table-wrapper">
-                    <table class="kv-table">
-                        <tbody>
-                            <tr><td>Monto</td><td>US$200,000</td></tr>
-                            <tr><td>Plazo</td><td>30 d&iacute;as</td></tr>
-                            <tr><td>Tipo</td><td>L&iacute;nea rotativa de proveedor</td></tr>
-                            <tr><td>Garant&iacute;a</td><td>Pagar&eacute; con aval solidario de accionistas (&gt;10%)</td></tr>
-                            <tr><td>Intereses moratorios</td><td>Tasa m&aacute;xima permitida (sistema financiero)</td></tr>
-                            <tr><td>Protesto</td><td>No sujeto a protesto (cl&aacute;usula est&aacute;ndar)</td></tr>
-                            <tr><td>Domicilio de pago</td><td>Domicilio fiscal de Nexsys</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3>4.3 Por qu&eacute; tomarla</h3>
-
-                <h4>Raz&oacute;n principal 1 &middot; Diversificaci&oacute;n de fondeo operativo</h4>
-                <p>El mercado peruano de mayoristas est&aacute; altamente concentrado: Ingram (~48%) y Deltron (~29%) suman cerca del 77% del volumen total. Hoy nuestra exposici&oacute;n operativa est&aacute; concentrada en Ingram. Esta concentraci&oacute;n es un riesgo real: ante restricciones de stock, cambios de precios, o cualquier disrupci&oacute;n operativa de un proveedor dominante, perdemos capacidad de servir a estudiantes. Sumar a Nexsys como contraparte activa amplía nuestras opciones operativas y nos da optionalidad para redirigir volumen instant&aacute;neamente.</p>
-
-                <h4>Raz&oacute;n principal 2 &middot; Fit de tama&ntilde;o &middot; somos un cliente material para Nexsys</h4>
-                <p><strong>Para Ingram somos una cuenta m&aacute;s; para Nexsys somos una cuenta relevante.</strong> US$200K rotando cada 30 d&iacute;as representa una porci&oacute;n del libro de Nexsys que s&iacute; mueve la aguja. Las consecuencias operativas son concretas:</p>
-                <ul>
-                    <li><strong>Atenci&oacute;n comercial diferencial:</strong> mejor disposici&oacute;n a calzar precios competitivos, a hacer holds de stock, y a responder r&aacute;pido.</li>
-                    <li><strong>Conexiones y referencias estrat&eacute;gicas:</strong> Nexsys ya nos ha conectado con NVIDIA y nos ha proporcionado referencias relevantes en el ecosistema tecnol&oacute;gico &mdash; algo que un mayorista grande dif&iacute;cilmente har&iacute;a por una cuenta de nuestro tama&ntilde;o.</li>
-                    <li><strong>Track record positivo escala mejor:</strong> nuestro buen comportamiento de pago se traduce m&aacute;s r&aacute;pido en ampliaciones y mejores condiciones.</li>
-                </ul>
-
-                <h4>Efectos positivos adicionales</h4>
-                <p>Firmar esta l&iacute;nea tambi&eacute;n: <em>(i)</em> <strong>construye historial con Nexsys</strong> para ampliaciones futuras (el patr&oacute;n que seguimos con Ingram: de US$50K en sep 2024 a US$200K hoy); y <em>(ii)</em> <strong>aporta credibilidad ante BBVA y otras contrapartes</strong> &mdash; cada nueva l&iacute;nea aprobada reduce la fricci&oacute;n de las siguientes evaluaciones crediticias.</p>
-            </section>
-
-            <section>
-                <h2>5 &middot; Aval solidario &middot; an&aacute;lisis detallado</h2>
-
-                <h3>5.1 Qu&eacute; firma cada aval</h3>
-                <p>Los accionistas con participaci&oacute;n mayor al 10% se constituyen como avales solidarios permanentes del pagar&eacute;. Los t&eacute;rminos exactos:</p>
-                <ul>
-                    <li><strong>Solidario:</strong> Nexsys puede ir contra cualquier aval directamente, sin agotar primero al deudor principal (BaldeCash) y sin orden particular entre los avales.</li>
-                    <li><strong>Renuncia al beneficio de excusi&oacute;n:</strong> los avales no pueden exigir que Nexsys ejecute primero los activos del deudor principal.</li>
-                    <li><strong>Incondicional e irrevocable por plazo indefinido:</strong> la garant&iacute;a vigente mientras haya saldo pendiente.</li>
-                    <li><strong>Consentimiento anticipado a pr&oacute;rrogas y renovaciones:</strong> sin necesidad de intervenci&oacute;n posterior de los avales.</li>
-                    <li><strong>Renuncia al fuero del domicilio:</strong> Nexsys puede iniciar cobranza judicial en el foro que m&aacute;s le convenga.</li>
-                </ul>
-
-                <h3>5.2 Qui&eacute;nes son los avales</h3>
-                <p>Pagar&eacute; firmado el 6 de mayo de 2026. Cuatro avales:</p>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th>Nombre</th><th>DNI/CE</th><th>Rol</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Ruben Angel Montenegro Lee</td><td>10314652</td><td>Founder &amp; CEO &middot; Accionista principal</td></tr>
-                            <tr><td>Sandra Elba Bianco Roa</td><td>40325030</td><td>C&oacute;nyuge del CEO</td></tr>
-                            <tr><td>Mar&iacute;a Elena Arosamena Badani</td><td>07870579</td><td>Board member &middot; Accionista</td></tr>
-                            <tr><td>Eduardo Jos&eacute; De Las Casas Figallo</td><td>08799238</td><td>Board member &middot; Accionista</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3>5.3 Cu&aacute;n est&aacute;ndar es esta estructura &middot; y el precedente que ya tenemos</h3>
-                <p>El aval solidario con renuncia al beneficio de excusi&oacute;n es est&aacute;ndar en Per&uacute; para empresas con menos de 5 a&ntilde;os o sin EEFF auditados. <strong>Ruben Montenegro Lee y Sandra Bianco Roa ya firmaron un pagar&eacute; con aval solidario para la l&iacute;nea de Ingram Micro el 23 de septiembre de 2024</strong> (ID 383706, vigente). La estructura legal, la renuncia al beneficio de excusi&oacute;n, la cl&aacute;usula de completaci&oacute;n, todo &mdash; ya fue suscrito y est&aacute; vigente.</p>
-
-                <div class="doc-buttons" style="margin: 12px 0 18px;">
-                    <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
-                        <span class="doc-btn-icon">&nearr;</span>
-                        <span class="doc-btn-content">
-                            <span class="doc-btn-label">Ver pagar&eacute; de referencia (Ingram)</span>
-                            <span class="doc-btn-sub">Firmado el 23 de septiembre de 2024</span>
-                        </span>
-                    </a>
-                </div>
-
-                <p>Lo nuevo con Nexsys es la incorporaci&oacute;n de los board members. <strong>En septiembre 2024, cuando se firm&oacute; Ingram, ni Eduardo De Las Casas ni Mar&iacute;a Elena Arosamena manten&iacute;an su participaci&oacute;n como acciones &mdash; la manten&iacute;an como notas convertibles.</strong> Por lo tanto no calificaban bajo el threshold del 10%. Posteriormente las notas se convirtieron a acciones. Nexsys es la primera l&iacute;nea que se negocia bajo esa configuraci&oacute;n accionaria actualizada.</p>
-
-                <p>Garant&iacute;as exigidas por cada contraparte:</p>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th>Contraparte</th><th>Garant&iacute;a exigida</th><th>Avales firmantes</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Ingram Micro</td><td>Pagar&eacute; con aval solidario</td><td>Ruben Montenegro, Sandra Bianco</td></tr>
-                            <tr><td>Peridot</td><td>Ninguna garant&iacute;a personal &middot; solo revisi&oacute;n de info financiera</td><td>&mdash;</td></tr>
-                            <tr><td>Deltron</td><td>Cheque de gerencia (no aval solidario)</td><td>&mdash;</td></tr>
-                            <tr><td>HP Finance</td><td>Ninguna garant&iacute;a adicional &middot; aprobaci&oacute;n directa del fabricante</td><td>&mdash;</td></tr>
-                            <tr><td><strong>Nexsys</strong></td><td><strong>Pagar&eacute; con aval solidario &middot; accionistas &gt;10%</strong></td><td><strong>Ruben, Sandra, De Las Casas, Arosamena</strong></td></tr>
-                            <tr><td>BBVA (en evaluaci&oacute;n)</td><td>Probablemente aval solidario &middot; pendiente confirmaci&oacute;n</td><td>Probablemente todos los principales</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p>Lecturas relevantes:</p>
-                <ul>
-                    <li><strong>Para Ruben y Sandra:</strong> firmar Nexsys no representa un cambio cualitativo en exposici&oacute;n personal. Ya son avales solidarios de Ingram por US$200K; sumar Nexsys es exposici&oacute;n incremental cuantitativa de la misma estructura.</li>
-                    <li><strong>Para De Las Casas y Arosamena:</strong> s&iacute; es la primera vez. La raz&oacute;n por la que no firmaron el pagar&eacute; de Ingram en septiembre 2024 es estructural &mdash; en ese momento su participaci&oacute;n estaba en forma de notas convertibles, no de acciones. Tras la conversi&oacute;n, s&iacute; superan el threshold. Vale la pena que revisen el pagar&eacute; de Ingram como referencia.</li>
-                    <li><strong>Hacia adelante:</strong> es probable que esta estructura se vuelva m&aacute;s frecuente. BBVA muy probablemente la exigir&aacute;. Nexsys es un buen primer paso porque la exposici&oacute;n est&aacute; acotada (l&iacute;nea de proveedor a 30 d&iacute;as, no deuda bancaria a 24 meses).</li>
-                </ul>
-                <p>Rechazar el aval con Nexsys es una opci&oacute;n v&aacute;lida, pero implica: (i) perder esta l&iacute;nea espec&iacute;fica, (ii) se&ntilde;alizar al mercado que no estamos dispuestos a la estructura est&aacute;ndar, lo que puede complicar negociaciones futuras incluyendo BBVA.</p>
-
-                <h3>5.4 Riesgo personal &middot; an&aacute;lisis</h3>
-                <p><strong>Exposici&oacute;n m&aacute;xima:</strong> US$200K + intereses moratorios y costas. Cada aval podr&iacute;a ser ejecutado por el monto completo (Nexsys elige a quien le sea m&aacute;s conveniente).</p>
-                <p><strong>Mitigantes:</strong></p>
-                <ul>
-                    <li><strong>Plazo corto (30 d&iacute;as):</strong> el saldo deudor rota r&aacute;pido, no se acumula.</li>
-                    <li><strong>Flujo de caja recurrente:</strong> BaldeCash genera recaudaci&oacute;n mensual estable que cubre m&uacute;ltiples veces los pagos a Nexsys.</li>
-                    <li><strong>Inventario y CxC como respaldo econ&oacute;mico de facto:</strong> aunque no son garant&iacute;a formal del pagar&eacute;, en un escenario de stress estos activos respaldan el cumplimiento.</li>
-                    <li><strong>Diversificaci&oacute;n de avales:</strong> al estar 4 personas firmando, ninguna est&aacute; sola.</li>
-                </ul>
-
-                <h3>5.5 Pagar&eacute; en blanco &middot; qu&eacute; significa</h3>
-                <p>El pagar&eacute; se firma con los campos de &ldquo;Importe US$&rdquo; y &ldquo;Fecha de Vencimiento&rdquo; en blanco. Es la <strong>cl&aacute;usula de completaci&oacute;n</strong>, est&aacute;ndar en l&iacute;neas rotativas: el cobrador completa el pagar&eacute; con el saldo deudor real al momento del incumplimiento.</p>
-                <p>El riesgo te&oacute;rico es que Nexsys complete el pagar&eacute; por un monto distinto al saldo real. Mitigantes: (i) cualquier completaci&oacute;n en exceso puede impugnarse judicialmente, (ii) la cl&aacute;usula expl&iacute;cita establece que la suma adeudada es la que efectivamente quede pendiente, (iii) la l&iacute;nea total est&aacute; topada en US$200K.</p>
-            </section>
-
-            <section>
-                <h2>6 &middot; Riesgos y mitigantes</h2>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th>Riesgo</th><th>Mitigante</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Default de BaldeCash &rarr; ejecuci&oacute;n de avales</td>
-                                <td>Plazo corto (30 d) acota saldo. Flujo recurrente cubre m&uacute;ltiples veces.</td>
-                            </tr>
-                            <tr>
-                                <td>Pagar&eacute; completado en exceso del saldo real</td>
-                                <td>Impugnaci&oacute;n judicial disponible. Tope contractual = US$200K. L&iacute;nea rotativa con registro auditable.</td>
-                            </tr>
-                            <tr>
-                                <td>Concentraci&oacute;n de riesgo en avales (4 personas)</td>
-                                <td>Ruben y Sandra ya son avales solidarios de Ingram bajo la misma estructura; para ellos es exposici&oacute;n incremental cuantitativa. Para De Las Casas y Arosamena es primera vez, mitigado por plazo corto (30 d) y monto acotado (US$200K).</td>
-                            </tr>
-                            <tr>
-                                <td>Aval por plazo indefinido</td>
-                                <td>Vigencia ligada al saldo pendiente. Sin saldo, sin obligaci&oacute;n. Est&aacute;ndar de mercado.</td>
-                            </tr>
-                            <tr>
-                                <td>Mora autom&aacute;tica (sin requerimiento formal)</td>
-                                <td>Sistemas internos de seguimiento de vencimientos. Equipo de Finanzas dedicado. Pr&aacute;ctica est&aacute;ndar.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section>
-                <h2>7 &middot; Recomendaci&oacute;n</h2>
-                <div class="recommendation">
-                    <div class="rec-label">Recomendaci&oacute;n</div>
-                    <div class="rec-text">Aprobar la firma del pagar&eacute; con Nexsys del Per&uacute; S.R.L. por US$200,000 a 30 d&iacute;as, con aval solidario permanente de los accionistas con participaci&oacute;n mayor al 10%: Ruben Montenegro Lee, Mar&iacute;a Elena Arosamena Badani, Eduardo De Las Casas Figallo y Sandra Bianco Roa.</div>
-                </div>
-                <p>La firma de este pagar&eacute; es el &uacute;ltimo paso operativo para activar la l&iacute;nea ya negociada. Demorar la decisi&oacute;n retrasa los beneficios estrat&eacute;gicos descritos y no aporta valor anal&iacute;tico adicional &mdash; todos los componentes relevantes est&aacute;n claros y los riesgos son est&aacute;ndar de mercado.</p>
-            </section>
-
-            <section>
-                <h2>Anexo &middot; Pagar&eacute; &iacute;ntegro</h2>
-                <div class="doc-buttons">
-                    <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
-                        <span class="doc-btn-icon">&darr;</span>
-                        <span class="doc-btn-content">
-                            <span class="doc-btn-label">Pagar&eacute; solicitado por Nexsys</span>
-                            <span class="doc-btn-sub">Documento a aprobar</span>
-                        </span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
-                        <span class="doc-btn-icon">&nearr;</span>
-                        <span class="doc-btn-content">
-                            <span class="doc-btn-label">Ver pagar&eacute; de referencia (Ingram)</span>
-                            <span class="doc-btn-sub">Firmado previamente</span>
-                        </span>
-                    </a>
-                </div>
-
-                <div class="pagare-box">
-                    <h4>PAGAR&Eacute;</h4>
-                    <div class="pg-meta">N&deg; NP-026-07107 &middot; Lima, 06 de mayo de 2026</div>
-
-                    <div class="pg-section">
-                        <p>Por este T&iacute;tulo Pagar&eacute; reconocemos adeudar y nos obligamos a pagar a <strong>NEXSYS DEL PERU S.R.L.</strong> con RUC N&deg;20470145901 a su orden el presente t&iacute;tulo, para su cobro, la suma de <strong>US$ [importe en blanco]</strong> (d&oacute;lares americanos), importe recibido a mi/nuestra entera satisfacci&oacute;n.</p>
-                    </div>
-
-                    <div class="pg-section">
-                        <div class="pg-section-title">Intereses y gastos</div>
-                        <p>La suma adeudada a criterio del acreedor podr&aacute; generar tasa de inter&eacute;s compensatorio e inter&eacute;s moratorio equivalente al m&aacute;ximo permitido en el sistema financiero. Todos los gastos de vigencia y cobranza ser&aacute;n de cuenta de emitentes y garantes. La mora opera de forma autom&aacute;tica por el transcurso del tiempo, sin necesidad de constituci&oacute;n formal.</p>
-                    </div>
-
-                    <div class="pg-section">
-                        <div class="pg-section-title">Imputaci&oacute;n de pagos</div>
-                        <p>Todo pago parcial se imputar&aacute; primero a intereses vencidos y el saldo al capital. Todo pago anticipado se imputar&aacute; a la cuota de amortizaci&oacute;n de vencimiento m&aacute;s pr&oacute;ximo. Domicilio de pago: domicilio fiscal de Nexsys del Per&uacute; S.R.L.</p>
-                    </div>
-
-                    <div class="pg-section">
-                        <div class="pg-section-title">Cl&aacute;usula de no protesto</div>
-                        <p>Este t&iacute;tulo no est&aacute; sujeto a protesto por falta de pago, salvo lo dispuesto en el art&iacute;culo 81.2 de la Ley 27287.</p>
-                    </div>
-
-                    <div class="pg-section">
-                        <div class="pg-section-title">Renuncia de domicilio</div>
-                        <p>Los emitentes renuncian al fuero del domicilio, pudiendo Nexsys entablar la ejecuci&oacute;n para su cobro donde lo tenga conveniente.</p>
-                    </div>
-
-                    <div class="pg-section">
-                        <div class="pg-section-title">Emitente</div>
-                        <p>
-                            Raz&oacute;n Social: <strong>BALDE K S.A.C.</strong><br>
-                            RUC: 20605530509<br>
-                            Representante Legal: MONTENEGRO LEE RUBEN ANGEL &middot; DNI 10314652<br>
-                            Domicilio: Av. Benavides Nro. 1238 Dpto. 404, Miraflores, Lima
-                        </p>
-                    </div>
-
-                    <div class="pg-section">
-                        <div class="pg-section-title">Garant&iacute;a &middot; Aval solidario permanente</div>
-                        <p>Los avales se constituyen como solidarios permanentes con el deudor y entre s&iacute;, renunciando expresamente al beneficio de excusi&oacute;n, garantizando el pago del pagar&eacute; y el cumplimiento de todas las obligaciones que representa. La garant&iacute;a es solidaria, incondicional, irrevocable y por plazo indefinido, vigente hasta total cancelaci&oacute;n. Los avales aceptan desde ahora las pr&oacute;rrogas y renovaciones que Nexsys conceda al avalado, sin necesidad de intervenci&oacute;n posterior.</p>
-
-                        <div class="aval-grid">
-                            <div class="aval">
-                                <strong>MONTENEGRO LEE RUBEN ANGEL</strong>
-                                DNI 10314652<br>
-                                Calle Malec&oacute;n Armendariz 183 Dpto 1402, Miraflores, Lima
-                            </div>
-                            <div class="aval">
-                                <strong>BIANCO ROA SANDRA ELBA</strong>
-                                DNI 40325030<br>
-                                Calle Malec&oacute;n Armendariz 183 Dpto 1402, Miraflores, Lima
-                            </div>
-                            <div class="aval">
-                                <strong>AROSAMENA BADANI MARIA ELENA</strong>
-                                DNI 07870579<br>
-                                De las Tapadas Mz C Lt 17B, La Encantada de Villa, Chorrillos, Lima
-                            </div>
-                            <div class="aval">
-                                <strong>DE LAS CASAS FIGALLO EDUARDO JOSE</strong>
-                                DNI 08799238<br>
-                                Calle Montecarlo 240, Urb. Chacarilla, Santiago de Surco, Lima
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <div class="form-section">
-                <div id="form-container-full">
-                    <h2>Su decisi&oacute;n</h2>
-                    <p class="form-question">&iquest;Aprueba firmar el pagar&eacute; con Nexsys del Per&uacute; por US$200K como aval solidario?</p>
-                    <form class="decision-form">
-                        <div class="vote-options">
-                            <div class="vote-option">
-                                <input type="radio" id="approve-full" name="vote" value="Apruebo" required>
-                                <label for="approve-full" class="vote-approve">
-                                    <span class="vote-icon">&#10003;</span>
-                                    <span class="vote-label">Apruebo</span>
-                                </label>
-                            </div>
-                            <div class="vote-option">
-                                <input type="radio" id="reject-full" name="vote" value="No apruebo">
-                                <label for="reject-full" class="vote-reject">
-                                    <span class="vote-icon">&#10007;</span>
-                                    <span class="vote-label">No apruebo</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="comments-full">Comentarios o condiciones</label>
-                            <textarea id="comments-full" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condici&oacute;n o consideraci&oacute;n a su voto"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name-full">Nombre</label>
-                                <select id="name-full" name="name" required>
-                                    <option value="" disabled selected>Seleccione su nombre</option>
-                                    <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
-                                    <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
-                                    <option value="Mar&iacute;a Elena Arosamena Badani">Mar&iacute;a Elena Arosamena Badani</option>
-                                    <option value="Eduardo Jos&eacute; De Las Casas Figallo">Eduardo Jos&eacute; De Las Casas Figallo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="date-full">Fecha</label>
-                                <input type="date" id="date-full" name="date">
-                            </div>
-                        </div>
-                        <button type="submit" class="submit-btn">Registrar voto</button>
-                    </form>
-                </div>
-                <div class="success-msg">
-                    <div class="check">&#10003;</div>
-                    <h3>Voto registrado</h3>
-                    <p class="success-detail"></p>
-                    <p class="note" style="margin-top:16px;">Su voto ha sido registrado exitosamente.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="footer">
-            BaldeCash S.A.C. &middot; Documento confidencial para uso exclusivo del directorio &middot; Mayo 2026
-        </div>
+<!-- Welcome Screen -->
+<div class="welcome" id="welcome">
+  <div class="welcome-inner">
+    <div class="welcome-meta">Memorándum informativo &middot; Confidencial</div>
+    <h1>Pagaré con aval solidario &middot; Nexsys del Perú</h1>
+    <div class="welcome-subhead">Balde K S.A.C. (BaldeCash) &middot; Lima, 11 de mayo de 2026</div>
+    <div class="welcome-dirigido">Documento informativo dirigido a <strong>Eduardo De Las Casas</strong> y <strong>María Elena Arosamena</strong><br>Preparado por la Gerencia General y Gerencia de Finanzas</div>
+
+    <div class="welcome-prompt">&iquest;Cómo desea leer el documento?</div>
+
+    <div class="welcome-options">
+      <button class="welcome-option" data-version="flash">
+        <div class="welcome-option-time">15 segundos</div>
+        <div class="welcome-option-label">Inmediata</div>
+        <div class="welcome-option-desc">Los datos clave del pagaré y enlaces a los documentos.</div>
+      </button>
+      <button class="welcome-option" data-version="short">
+        <div class="welcome-option-time">~2 minutos</div>
+        <div class="welcome-option-label">Corta</div>
+        <div class="welcome-option-desc">Resumen del pagaré, los avales, y el contexto de otras contrapartes.</div>
+      </button>
+      <button class="welcome-option" data-version="medium">
+        <div class="welcome-option-time">~5 minutos</div>
+        <div class="welcome-option-label">Media</div>
+        <div class="welcome-option-desc">Descripción detallada con términos del pagaré, estructura del aval y precedente con Ingram.</div>
+      </button>
+      <button class="welcome-option" data-version="full">
+        <div class="welcome-option-time">~10 minutos</div>
+        <div class="welcome-option-label">Completa</div>
+        <div class="welcome-option-desc">Documento completo con anexos, tablas de mercado, comparativos detallados y pagaré íntegro.</div>
+      </button>
     </div>
 
-    <script>
-        // Google Sheets integration
-        var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKmb2pho9uYwg7or0wPN72hFMyTE1O0itvTNuQTXeS8aVHdNfNi7YikvbHWhCEOlNJ/exec';
+    <div class="welcome-footer">Podrá cambiar de versión en cualquier momento desde el selector en la parte superior.</div>
+  </div>
+</div>
 
-        // Version picker
-        var pickerBtns = document.querySelectorAll('.picker-btn');
-        var versions = document.querySelectorAll('.version');
-        pickerBtns.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var target = btn.dataset.version;
-                pickerBtns.forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                versions.forEach(function(v) { v.classList.remove('active'); });
-                document.getElementById('v-' + target).classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
+<div class="wrap">
 
-        // Set today's date on all date inputs
-        (function() {
-            var now = new Date();
-            var yyyy = now.getFullYear();
-            var mm = String(now.getMonth() + 1).padStart(2, '0');
-            var dd = String(now.getDate()).padStart(2, '0');
-            var today = yyyy + '-' + mm + '-' + dd;
-            document.querySelectorAll('input[type="date"]').forEach(function(input) {
-                input.value = today;
-            });
-        })();
+  <div class="meta">Memorándum informativo &middot; Confidencial</div>
+  <h1>Pagaré con aval solidario &middot; Nexsys del Perú</h1>
+  <div class="subhead">Balde K S.A.C. (BaldeCash) &middot; Lima, 11 de mayo de 2026 &middot; Documento informativo para Eduardo De Las Casas y María Elena Arosamena &middot; Preparado por la Gerencia General y Gerencia de Finanzas</div>
 
-        // Wire up all decision forms
-        document.querySelectorAll('.decision-form').forEach(function(form) {
-            var formSection = form.closest('.form-section');
-            var formContainer = form.parentElement;
-            var successMsg = formSection.querySelector('.success-msg');
-            var successDetail = formSection.querySelector('.success-detail');
+  <div class="switcher">
+    <span class="switcher-label">Versión:</span>
+    <div class="switcher-btns">
+      <button class="switcher-btn" data-version="flash">Inmediata &middot; 15 seg</button>
+      <button class="switcher-btn" data-version="short">Corta &middot; 2 min</button>
+      <button class="switcher-btn" data-version="medium">Media &middot; 5 min</button>
+      <button class="switcher-btn" data-version="full">Completa &middot; 10 min</button>
+    </div>
+  </div>
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+  <!-- ========== VERSIÓN INMEDIATA ========== -->
+  <div class="version" id="v-flash">
+    <div class="flash">
+      <div class="flash-q">El documento</div>
+      <div class="flash-a">Pagaré a favor de <strong>Nexsys del Perú</strong> por <span class="flash-num">US$200K</span> a 30 días, con aval solidario de los accionistas con participación mayor al 10%.</div>
+    </div>
 
-                var formData = new FormData(form);
-                var vote = formData.get('vote');
-                var name = formData.get('name');
-                var comments = formData.get('comments');
-                var date = formData.get('date');
+    <div class="flash">
+      <div class="flash-q">Datos clave</div>
+      <ul class="tight">
+        <li>Nexsys es un mayorista de tecnología relevante del mercado peruano, con llegada directa a las marcas principales.</li>
+        <li>El pagaré requiere la firma de cuatro avales: Ruben Montenegro, Sandra Bianco, Eduardo De Las Casas y María Elena Arosamena.</li>
+        <li>Ruben y Sandra ya firmaron un pagaré con aval solidario para la línea de Ingram Micro en septiembre 2024. Eduardo y María Elena no firmaron entonces porque su participación estaba en forma de notas convertibles, no de acciones; tras la conversión, hoy superan el threshold accionario del 10%.</li>
+        <li>El pagaré se firma con campos de monto y vencimiento en blanco (cláusula de completación, estándar en líneas rotativas). La exposición máxima está topada por la línea: US$200K.</li>
+      </ul>
+    </div>
 
-                var submitBtn = form.querySelector('.submit-btn');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Enviando...';
+    <div class="doc-buttons">
+      <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
+        <span class="doc-btn-icon">&darr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Pagaré solicitado por Nexsys</span>
+          <span class="doc-btn-sub">Documento a aprobar</span>
+        </span>
+      </a>
+      <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
+        <span class="doc-btn-icon">&nearr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Ver pagaré de referencia (Ingram)</span>
+          <span class="doc-btn-sub">Firmado previamente</span>
+        </span>
+      </a>
+    </div>
 
-                var payload = {
-                    nombre: name,
-                    voto: vote,
-                    comentarios: comments || '',
-                    fecha: date
-                };
+    <div class="form-section">
+      <div id="form-container-flash">
+        <h3>Decisión</h3>
+        <div class="form-question">&iquest;Firmará el pagaré con Nexsys del Perú por US$200K como aval solidario?</div>
+        <form class="decision-form">
+          <div class="vote-options">
+            <div class="vote-option">
+              <input type="radio" id="approve-flash" name="vote" value="Apruebo" required>
+              <label for="approve-flash" class="vote-approve">
+                <span class="vote-icon">&#10003;</span>
+                <span class="vote-label-text">Apruebo</span>
+              </label>
+            </div>
+            <div class="vote-option">
+              <input type="radio" id="reject-flash" name="vote" value="No apruebo">
+              <label for="reject-flash" class="vote-reject">
+                <span class="vote-icon">&#10007;</span>
+                <span class="vote-label-text">No apruebo</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-group-label" for="comments-flash">Comentarios o condiciones</label>
+            <textarea id="comments-flash" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condición o consideración a su voto"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-group-label" for="name-flash">Nombre</label>
+              <select id="name-flash" name="name" required>
+                <option value="" disabled selected>Seleccione su nombre</option>
+                <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
+                <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
+                <option value="María Elena Arosamena Badani">María Elena Arosamena Badani</option>
+                <option value="Eduardo José De Las Casas Figallo">Eduardo José De Las Casas Figallo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-group-label" for="date-flash">Fecha</label>
+              <input type="date" id="date-flash" name="date">
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Registrar voto</button>
+        </form>
+      </div>
+      <div class="success-msg">
+        <div class="check">&#10003;</div>
+        <h3>Voto registrado</h3>
+        <p class="success-detail"></p>
+        <p class="note">Su voto ha sido registrado exitosamente.</p>
+      </div>
+    </div>
+  </div>
 
-                fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                })
-                .then(function() {
-                    formContainer.style.display = 'none';
-                    successMsg.style.display = 'block';
-                    successDetail.innerHTML = '<strong>' + name + '</strong> &mdash; ' + vote + '<br>' + date;
-                })
-                .catch(function(err) {
-                    alert('Error al enviar el voto. Por favor intente nuevamente.');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Registrar voto';
-                    console.error('Error:', err);
-                });
-            });
-        });
-    </script>
+  <!-- ========== VERSIÓN CORTA ========== -->
+  <div class="version" id="v-short">
+
+    <h2>Resumen</h2>
+
+    <p>Este documento describe el pagaré que Nexsys del Perú S.R.L. solicita firmar para activar una línea de crédito de US$200,000 a 30 días para la compra de equipos tecnológicos. El pagaré requiere la firma de cuatro avales solidarios: Ruben Montenegro Lee, Sandra Bianco Roa, Eduardo De Las Casas Figallo y María Elena Arosamena Badani.</p>
+
+    <h3>Sobre Nexsys</h3>
+    <p>Nexsys del Perú es un mayorista de tecnología con presencia regional latinoamericana y llegada directa con las marcas principales. Sus cifras de importaciones oscilan mes a mes, ubicándolo consistentemente entre los proveedores principales del mercado peruano. El mercado de mayoristas en Perú está concentrado en Ingram Micro y Deltron, con Nexsys, Compudiskette, Intcomex, Maxima y otros distribuidos en el resto del volumen.</p>
+
+    <h3>Sobre la estructura del pagaré</h3>
+    <p>Los términos principales son: importe de US$200,000, plazo de 30 días, aval solidario permanente con renuncia al beneficio de excusión, no sujeto a protesto, y firmado con campos de importe y vencimiento en blanco (cláusula de completación, estándar en líneas rotativas de proveedor). Esta estructura es la misma que la del pagaré firmado con Ingram Micro en septiembre 2024 por Ruben y Sandra.</p>
+
+    <h3>Sobre los avales firmantes</h3>
+    <p>Ruben y Sandra ya firmaron un pagaré con aval solidario para Ingram en septiembre 2024. En esa fecha, Eduardo y María Elena no firmaron porque su participación en la compañía estaba bajo la forma de notas convertibles, no de acciones, por lo que no calificaban como accionistas materiales bajo el threshold del 10% que típicamente activa la obligación de avalar. Posteriormente esas notas se convirtieron a acciones, y desde entonces ambos superan el threshold accionario. Nexsys es la primera línea nueva que se negocia bajo esa configuración accionaria.</p>
+
+    <h3>Otras contrapartes activas</h3>
+    <p>BaldeCash mantiene actualmente líneas activas con Ingram Micro (US$200K a 45 días, ampliada de US$50K inicial en sep 2024), Peridot en alianza con Ingram (US$250K a 75 días, sin garantías personales) y Deltron (US$20K a 30 días, garantizada con cheque de gerencia). Adicionalmente, HP Finance ha aprobado una línea de leasing de US$100K para sublease, pendiente de ejecución, sin sustento crediticio adicional. Compudiskette se encuentra en conversación avanzada.</p>
+
+    <div class="doc-buttons">
+      <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
+        <span class="doc-btn-icon">&darr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Pagaré solicitado por Nexsys</span>
+          <span class="doc-btn-sub">Documento a aprobar</span>
+        </span>
+      </a>
+      <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
+        <span class="doc-btn-icon">&nearr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Ver pagaré de referencia (Ingram)</span>
+          <span class="doc-btn-sub">Firmado previamente</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="form-section">
+      <div id="form-container-short">
+        <h3>Decisión</h3>
+        <div class="form-question">&iquest;Firmará el pagaré con Nexsys del Perú por US$200K como aval solidario?</div>
+        <form class="decision-form">
+          <div class="vote-options">
+            <div class="vote-option">
+              <input type="radio" id="approve-short" name="vote" value="Apruebo" required>
+              <label for="approve-short" class="vote-approve">
+                <span class="vote-icon">&#10003;</span>
+                <span class="vote-label-text">Apruebo</span>
+              </label>
+            </div>
+            <div class="vote-option">
+              <input type="radio" id="reject-short" name="vote" value="No apruebo">
+              <label for="reject-short" class="vote-reject">
+                <span class="vote-icon">&#10007;</span>
+                <span class="vote-label-text">No apruebo</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-group-label" for="comments-short">Comentarios o condiciones</label>
+            <textarea id="comments-short" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condición o consideración a su voto"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-group-label" for="name-short">Nombre</label>
+              <select id="name-short" name="name" required>
+                <option value="" disabled selected>Seleccione su nombre</option>
+                <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
+                <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
+                <option value="María Elena Arosamena Badani">María Elena Arosamena Badani</option>
+                <option value="Eduardo José De Las Casas Figallo">Eduardo José De Las Casas Figallo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-group-label" for="date-short">Fecha</label>
+              <input type="date" id="date-short" name="date">
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Registrar voto</button>
+        </form>
+      </div>
+      <div class="success-msg">
+        <div class="check">&#10003;</div>
+        <h3>Voto registrado</h3>
+        <p class="success-detail"></p>
+        <p class="note">Su voto ha sido registrado exitosamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VERSIÓN MEDIA ========== -->
+  <div class="version" id="v-medium">
+
+    <h2>1 &middot; Contexto</h2>
+    <p>Nexsys del Perú S.R.L. ha extendido a Balde K S.A.C. una línea de crédito comercial por US$200,000 a 30 días para la compra de equipos tecnológicos. Para activar la línea, Nexsys solicita la firma de un pagaré incompleto con aval solidario permanente de los accionistas con participación mayor al 10%. Este documento describe la situación del pagaré, los términos y las contrapartes relevantes.</p>
+
+    <h2>2 &middot; Sobre Nexsys del Perú</h2>
+    <p>Nexsys del Perú S.R.L. (RUC 20470145901) es un mayorista de tecnología con presencia regional latinoamericana y llegada directa con las marcas principales. Sus cifras de importaciones oscilan mes a mes, ubicándolo consistentemente entre los proveedores principales del mercado peruano.</p>
+    <p>El mercado de mayoristas de tecnología en Perú está concentrado en Ingram Micro (~48% del volumen en YTD 2026) y Deltron (~29%), con el resto distribuido entre Nexsys, Compudiskette, Intcomex, Maxima y otros. Compudiskette ha crecido vía M&amp;A en los últimos meses y cerró 2025 por encima de Nexsys en volumen acumulado; en YTD 2026 se encuentra ligeramente por debajo.</p>
+
+    <h2>3 &middot; Contrapartes activas y en evaluación</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Contraparte</th><th>Línea</th><th>Plazo</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ingram Micro</td><td class="num">US$200K</td><td>45 días</td><td><span class="tag good">Activa &middot; ampliada desde US$50K (sep 2024)</span></td></tr>
+        <tr><td>Peridot (+ Ingram)</td><td class="num">US$250K</td><td>75 días</td><td><span class="tag good">Activa &middot; abr 2026</span></td></tr>
+        <tr><td>Deltron</td><td class="num">US$20K</td><td>30 días</td><td><span class="tag warn">Activa</span></td></tr>
+        <tr><td>HP Finance</td><td class="num">US$100K</td><td>Leasing</td><td><span class="tag good">Aprobada &middot; por ejecutar</span></td></tr>
+        <tr><td>Nexsys del Perú</td><td class="num">US$200K</td><td>30 días</td><td><span class="tag live">Ofrecida &middot; pendiente firma</span></td></tr>
+        <tr><td>Compudiskette</td><td class="num">TBD</td><td>&mdash;</td><td><span class="tag eval">Conversación avanzada</span></td></tr>
+      </tbody>
+    </table>
+    <p>La línea de Ingram Micro se firmó originalmente en septiembre 2024 por US$50K con aval solidario de Ruben Montenegro y Sandra Bianco. Se ha ampliado progresivamente a US$150K (2025) y US$200K (2026). La línea de Peridot, otorgada en abril 2026 en alianza con Ingram, no requirió garantías personales &mdash; Peridot evaluó la línea con base en revisión de información financiera. Deltron solicitó cheque de gerencia como garantía. HP Finance aprobó la línea de leasing sin requerir sustento crediticio adicional.</p>
+
+    <h2>4 &middot; Términos del pagaré de Nexsys</h2>
+    <table class="tbl">
+      <tbody>
+        <tr><td><strong>Monto</strong></td><td class="num">US$200,000</td></tr>
+        <tr><td><strong>Plazo</strong></td><td>30 días</td></tr>
+        <tr><td><strong>Tipo</strong></td><td>Línea rotativa de proveedor</td></tr>
+        <tr><td><strong>Garantía</strong></td><td>Pagaré con aval solidario permanente de accionistas (&gt;10%)</td></tr>
+        <tr><td><strong>Intereses moratorios</strong></td><td>Tasa máxima permitida en el sistema financiero</td></tr>
+        <tr><td><strong>Protesto</strong></td><td>No sujeto a protesto (salvo lo dispuesto en artículo 81.2 de Ley 27287)</td></tr>
+        <tr><td><strong>Campos en blanco</strong></td><td>Importe y fecha de vencimiento (cláusula de completación)</td></tr>
+        <tr><td><strong>Domicilio de pago</strong></td><td>Domicilio fiscal de Nexsys del Perú S.R.L.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>5 &middot; Sobre el aval solidario</h2>
+    <p>Los accionistas con participación mayor al 10% se constituyen como avales solidarios permanentes del pagaré. Los términos exactos del documento son: solidario (Nexsys puede ir contra cualquier aval directamente sin agotar primero al deudor principal y sin orden particular entre los avales); con renuncia expresa al beneficio de excusión; incondicional e irrevocable por plazo indefinido (vigente hasta total cancelación); con consentimiento anticipado a prórrogas y renovaciones; y con renuncia al fuero del domicilio.</p>
+
+    <p>El pagaré requiere la firma de cuatro avales: Ruben Montenegro Lee (DNI 10314652), Sandra Bianco Roa (DNI 40325030), María Elena Arosamena Badani (DNI 07870579) y Eduardo De Las Casas Figallo (DNI 08799238).</p>
+
+    <h3>Precedente: el pagaré de Ingram Micro</h3>
+    <p>Ruben Montenegro y Sandra Bianco firmaron un pagaré con aval solidario para la línea de Ingram Micro el 23 de septiembre de 2024 (ID 383706, vigente). La estructura legal, la renuncia al beneficio de excusión, la cláusula de completación, y todo el lenguaje del documento ya fueron suscritos por ellos y están vigentes. El pagaré de Nexsys replica esa misma estructura.</p>
+    <p>En esa fecha, ni Eduardo De Las Casas ni María Elena Arosamena firmaron como avales. La razón es estructural: en septiembre 2024, ambos mantenían su participación en la compañía bajo la forma de notas convertibles, no de acciones, por lo que no calificaban como accionistas materiales bajo el threshold del 10% que activa la obligación de avalar. Posteriormente esas notas se convirtieron a acciones, y desde entonces ambos superan el threshold accionario. Nexsys es la primera línea nueva que se negocia bajo esa configuración accionaria actualizada, lo que explica su incorporación como avales firmantes.</p>
+
+    <h3>Comparativo de garantías por contraparte</h3>
+    <table class="tbl">
+      <thead>
+        <tr><th>Contraparte</th><th>Garantía exigida</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ingram Micro</td><td>Pagaré con aval solidario (Ruben Montenegro, Sandra Bianco)</td></tr>
+        <tr><td>Peridot</td><td>Sin garantía personal &mdash; solo revisión de información financiera</td></tr>
+        <tr><td>Deltron</td><td>Cheque de gerencia</td></tr>
+        <tr><td>HP Finance</td><td>Sin sustento adicional requerido</td></tr>
+        <tr><td>Nexsys</td><td>Pagaré con aval solidario (los cuatro accionistas con &gt;10%)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>6 &middot; Sobre el pagaré incompleto</h2>
+    <p>El pagaré se firma con los campos de "Importe US$" y "Fecha de Vencimiento" en blanco. Esta es la cláusula de completación, estándar en líneas rotativas de proveedor: el acreedor completa el pagaré con el saldo deudor real al momento de cobranza. La exposición máxima por aval está acotada al saldo de la línea (US$200K) más intereses moratorios y costas.</p>
+
+    <div class="doc-buttons">
+      <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
+        <span class="doc-btn-icon">&darr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Pagaré solicitado por Nexsys</span>
+          <span class="doc-btn-sub">Documento a aprobar</span>
+        </span>
+      </a>
+      <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
+        <span class="doc-btn-icon">&nearr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Ver pagaré de referencia (Ingram)</span>
+          <span class="doc-btn-sub">Firmado previamente</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="form-section">
+      <div id="form-container-medium">
+        <h3>Decisión</h3>
+        <div class="form-question">&iquest;Firmará el pagaré con Nexsys del Perú por US$200K como aval solidario?</div>
+        <form class="decision-form">
+          <div class="vote-options">
+            <div class="vote-option">
+              <input type="radio" id="approve-medium" name="vote" value="Apruebo" required>
+              <label for="approve-medium" class="vote-approve">
+                <span class="vote-icon">&#10003;</span>
+                <span class="vote-label-text">Apruebo</span>
+              </label>
+            </div>
+            <div class="vote-option">
+              <input type="radio" id="reject-medium" name="vote" value="No apruebo">
+              <label for="reject-medium" class="vote-reject">
+                <span class="vote-icon">&#10007;</span>
+                <span class="vote-label-text">No apruebo</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-group-label" for="comments-medium">Comentarios o condiciones</label>
+            <textarea id="comments-medium" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condición o consideración a su voto"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-group-label" for="name-medium">Nombre</label>
+              <select id="name-medium" name="name" required>
+                <option value="" disabled selected>Seleccione su nombre</option>
+                <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
+                <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
+                <option value="María Elena Arosamena Badani">María Elena Arosamena Badani</option>
+                <option value="Eduardo José De Las Casas Figallo">Eduardo José De Las Casas Figallo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-group-label" for="date-medium">Fecha</label>
+              <input type="date" id="date-medium" name="date">
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Registrar voto</button>
+        </form>
+      </div>
+      <div class="success-msg">
+        <div class="check">&#10003;</div>
+        <h3>Voto registrado</h3>
+        <p class="success-detail"></p>
+        <p class="note">Su voto ha sido registrado exitosamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VERSIÓN COMPLETA ========== -->
+  <div class="version" id="v-full">
+
+    <h2>1 &middot; Propósito de este documento</h2>
+    <p>Este memorándum describe el pagaré que Nexsys del Perú S.R.L. solicita firmar para activar una línea de crédito comercial de US$200,000 a 30 días destinada a la compra de equipos tecnológicos. El documento presenta el contexto de la contraparte, los términos del pagaré, la estructura del aval solidario, el precedente del pagaré previamente firmado con Ingram Micro, y las garantías exigidas por las demás contrapartes con las que BaldeCash mantiene líneas activas o en evaluación. Este documento es informativo y está dirigido a los accionistas que deben firmar el pagaré como avales solidarios.</p>
+
+    <h2>2 &middot; Sobre Nexsys del Perú</h2>
+    <p>Nexsys del Perú S.R.L. (RUC 20470145901) es un mayorista de tecnología con presencia regional latinoamericana y llegada directa con las principales marcas del sector. Sus cifras de importaciones oscilan mes a mes &mdash; en algunos períodos aparece como el tercer mayorista del mercado, en otros entre el cuarto y quinto &mdash; pero consistentemente lo ubican entre los proveedores principales.</p>
+
+    <h3>Estructura del mercado peruano de mayoristas</h3>
+    <p>El mercado peruano de mayoristas de tecnología muestra la siguiente distribución de volumen de importaciones (acumulado YTD 2026):</p>
+    <table class="tbl">
+      <thead>
+        <tr><th>Mayorista</th><th>YTD 2026 (S/MM)</th><th>Share</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ingram Micro</td><td class="num">4.45</td><td class="num">48.2%</td></tr>
+        <tr><td>Deltron</td><td class="num">2.69</td><td class="num">29.2%</td></tr>
+        <tr><td>Nexsys</td><td class="num">0.93</td><td class="num">10.1%</td></tr>
+        <tr><td>Otros (Compudiskette, Intcomex, Maxima, etc.)</td><td class="num">1.16</td><td class="num">12.5%</td></tr>
+        <tr class="total"><td><strong>Total mercado</strong></td><td class="num"><strong>9.24</strong></td><td class="num"><strong>100%</strong></td></tr>
+      </tbody>
+    </table>
+    <p class="footnote">Fuente: data de importaciones por mayorista (acumulado YTD 2026). Las posiciones dentro de "Otros" varían según el período: Compudiskette ha crecido significativamente vía M&amp;A en los últimos meses y cerró 2025 por encima de Nexsys; en YTD 2026 está ligeramente por debajo pero sigue siendo un player relevante.</p>
+
+    <h2>3 &middot; Contrapartes activas y en evaluación</h2>
+
+    <h3>Detalle por contraparte</h3>
+    <table class="tbl">
+      <thead>
+        <tr><th>Contraparte</th><th>Tipo</th><th>Línea</th><th>Plazo</th><th>Inicio</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ingram Micro</td>
+          <td>Mayorista #1 (~48% share)</td>
+          <td class="num">US$200K</td>
+          <td>45 d</td>
+          <td>Sep 2024</td>
+          <td><span class="tag good">Activa</span></td>
+        </tr>
+        <tr>
+          <td>Peridot + Ingram</td>
+          <td>Fondo extranjero + mayorista</td>
+          <td class="num">US$250K</td>
+          <td>75 d</td>
+          <td>Abr 2026</td>
+          <td><span class="tag good">Activa</span></td>
+        </tr>
+        <tr>
+          <td>Deltron</td>
+          <td>Mayorista #2 (~29% share)</td>
+          <td class="num">US$20K</td>
+          <td>30 d</td>
+          <td>2025</td>
+          <td><span class="tag warn">Activa</span></td>
+        </tr>
+        <tr>
+          <td>HP Finance</td>
+          <td>Brazo financiero de fabricante &middot; leasing</td>
+          <td class="num">US$100K</td>
+          <td>Leasing</td>
+          <td>2026</td>
+          <td><span class="tag good">Aprobada &middot; por ejecutar</span></td>
+        </tr>
+        <tr>
+          <td>Nexsys</td>
+          <td>Mayorista relevante (~10% share)</td>
+          <td class="num">US$200K</td>
+          <td>30 d</td>
+          <td>Pendiente</td>
+          <td><span class="tag live">Ofrecida</span></td>
+        </tr>
+        <tr>
+          <td>Compudiskette</td>
+          <td>Mayorista en expansión (M&amp;A reciente)</td>
+          <td class="num">TBD</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td><span class="tag eval">Conversación avanzada</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Notas descriptivas sobre cada contraparte</h3>
+    <p><strong>Ingram Micro</strong> es el mayorista principal de BaldeCash. La línea inicial fue de US$50K firmada en septiembre 2024 a 45 días de plazo, y se ha ampliado progresivamente a US$150K en 2025 y US$200K en 2026. El pagaré original fue firmado con aval solidario de Ruben Montenegro y Sandra Bianco.</p>
+    <p><strong>Peridot</strong> es un fondo de inversión extranjero que opera en alianza con Ingram Micro. La línea de US$250K otorgada en abril 2026 fue aprobada con base en revisión de información financiera, sin requerir garantías personales ni colaterales adicionales.</p>
+    <p><strong>Deltron</strong> es el segundo mayorista del mercado peruano. BaldeCash mantiene con Deltron una línea de US$20K otorgada en 2025 y garantizada con cheque de gerencia.</p>
+    <p><strong>HP Finance</strong> aprobó una línea de leasing financiero por US$100K para esquema de sublease, sin requerir sustento crediticio adicional. La línea está aprobada y pendiente de ejecución.</p>
+    <p><strong>Compudiskette</strong> ha crecido significativamente vía M&amp;A en los últimos meses y es un player relevante del mercado mayorista. BaldeCash se encuentra en conversación avanzada con Compudiskette para una línea de crédito.</p>
+
+    <h2>4 &middot; Términos del pagaré de Nexsys</h2>
+    <table class="tbl">
+      <tbody>
+        <tr><td><strong>Acreedor</strong></td><td>Nexsys del Perú S.R.L. (RUC 20470145901)</td></tr>
+        <tr><td><strong>Deudor principal</strong></td><td>Balde K S.A.C. (RUC 20605530509)</td></tr>
+        <tr><td><strong>N&deg; de pagaré</strong></td><td>NP-026-07107</td></tr>
+        <tr><td><strong>Monto</strong></td><td class="num">US$200,000</td></tr>
+        <tr><td><strong>Plazo</strong></td><td>30 días</td></tr>
+        <tr><td><strong>Tipo</strong></td><td>Línea rotativa de proveedor</td></tr>
+        <tr><td><strong>Garantía</strong></td><td>Pagaré con aval solidario permanente</td></tr>
+        <tr><td><strong>Avales firmantes</strong></td><td>Accionistas con participación &gt;10%</td></tr>
+        <tr><td><strong>Intereses</strong></td><td>Compensatorios y moratorios a tasa máxima permitida en el sistema financiero</td></tr>
+        <tr><td><strong>Protesto</strong></td><td>No sujeto a protesto (salvo artículo 81.2 de Ley 27287)</td></tr>
+        <tr><td><strong>Campos en blanco</strong></td><td>Importe y fecha de vencimiento (cláusula de completación)</td></tr>
+        <tr><td><strong>Mora</strong></td><td>Automática por transcurso del tiempo, sin constitución formal</td></tr>
+        <tr><td><strong>Domicilio de pago</strong></td><td>Domicilio fiscal de Nexsys del Perú S.R.L.</td></tr>
+        <tr><td><strong>Fuero</strong></td><td>Renuncia al fuero del domicilio de los emitentes</td></tr>
+        <tr><td><strong>Fecha de emisión</strong></td><td>6 de mayo de 2026</td></tr>
+      </tbody>
+    </table>
+
+    <h2>5 &middot; Estructura del aval solidario</h2>
+
+    <h3>5.1 Términos legales del aval</h3>
+    <p>Los accionistas con participación mayor al 10% se constituyen como avales solidarios permanentes del pagaré. Los términos exactos del documento (cláusula de "Garantía / Aval Solidario Permanente") son:</p>
+    <ul>
+      <li><strong>Solidario:</strong> Nexsys puede ir contra cualquier aval directamente, sin agotar primero al deudor principal (BaldeCash) y sin orden particular entre los avales.</li>
+      <li><strong>Renuncia al beneficio de excusión:</strong> los avales no pueden exigir que Nexsys ejecute primero los activos del deudor principal.</li>
+      <li><strong>Incondicional e irrevocable por plazo indefinido:</strong> la garantía vigente mientras haya saldo pendiente.</li>
+      <li><strong>Consentimiento anticipado a prórrogas y renovaciones:</strong> los avales aceptan desde la firma cualquier extensión que Nexsys conceda a BaldeCash, sin necesidad de intervención posterior.</li>
+      <li><strong>Renuncia al fuero del domicilio:</strong> Nexsys puede iniciar cobranza judicial en el foro que más le convenga.</li>
+    </ul>
+
+    <h3>5.2 Avales firmantes</h3>
+    <p>El pagaré requiere la firma de los siguientes cuatro avales:</p>
+    <table class="tbl">
+      <thead>
+        <tr><th>Nombre</th><th>DNI/CE</th><th>Rol</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ruben Angel Montenegro Lee</td><td>10314652</td><td>Founder &amp; CEO &middot; accionista principal</td></tr>
+        <tr><td>Sandra Elba Bianco Roa</td><td>40325030</td><td>Cónyuge del CEO &middot; co-aval por régimen patrimonial</td></tr>
+        <tr><td>María Elena Arosamena Badani</td><td>07870579</td><td>Board member &middot; accionista</td></tr>
+        <tr><td>Eduardo José De Las Casas Figallo</td><td>08799238</td><td>Board member &middot; accionista</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.3 Precedente y comparativo con otras contrapartes</h3>
+    <p>El aval solidario con renuncia al beneficio de excusión es una estructura estándar en líneas comerciales de proveedor en Perú para empresas con menos de 5 años de historia o sin EEFF auditados. Su uso por parte de mayoristas como Ingram, Deltron, Nexsys, Compudiskette e Intcomex es común, aunque cada contraparte aplica criterios distintos en cuanto a quiénes deben firmar.</p>
+    <p>BaldeCash cuenta con un precedente directo de esta estructura: <strong>Ruben Montenegro y Sandra Bianco firmaron un pagaré con aval solidario para la línea de Ingram Micro el 23 de septiembre de 2024</strong> (ID 383706, vigente). Los términos del pagaré de Nexsys replican exactamente la estructura legal del pagaré de Ingram.</p>
+    <div class="doc-buttons" style="margin: 12px 0 18px;">
+      <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref" style="flex: 0 1 auto;">
+        <span class="doc-btn-icon">&nearr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Ver pagaré de referencia (Ingram)</span>
+          <span class="doc-btn-sub">Firmado el 23 de septiembre de 2024</span>
+        </span>
+      </a>
+    </div>
+    <p>En septiembre 2024, ni Eduardo De Las Casas ni María Elena Arosamena firmaron como avales del pagaré de Ingram. La razón es estructural: en esa fecha, ambos mantenían su participación en la compañía bajo la forma de notas convertibles, no de acciones, por lo que no calificaban como accionistas materiales bajo el threshold del 10% que típicamente activa la obligación de avalar. Posteriormente esas notas se convirtieron a acciones, y desde entonces ambos superan el threshold accionario. Nexsys es la primera línea nueva que se negocia bajo esa configuración accionaria actualizada.</p>
+
+    <p>La tabla siguiente resume las garantías exigidas por las distintas contrapartes con las que BaldeCash mantiene líneas activas o en evaluación:</p>
+    <table class="tbl">
+      <thead>
+        <tr><th>Contraparte</th><th>Garantía exigida</th><th>Avales firmantes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ingram Micro</td><td>Pagaré con aval solidario</td><td>Ruben Montenegro, Sandra Bianco</td></tr>
+        <tr><td>Peridot</td><td>Sin garantía personal &mdash; solo revisión de información financiera</td><td>&mdash;</td></tr>
+        <tr><td>Deltron</td><td>Cheque de gerencia</td><td>&mdash;</td></tr>
+        <tr><td>HP Finance</td><td>Sin sustento adicional requerido &mdash; aprobación directa del fabricante</td><td>&mdash;</td></tr>
+        <tr><td><strong>Nexsys</strong></td><td><strong>Pagaré con aval solidario &middot; accionistas &gt;10%</strong></td><td><strong>Ruben, Sandra, De Las Casas, Arosamena</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h2>6 &middot; Sobre el pagaré incompleto</h2>
+    <p>El pagaré se firma con los campos de "Importe US$" y "Fecha de Vencimiento" en blanco. Esta es la cláusula de completación, regulada por el artículo 10 de la Ley 27287 (Ley de Títulos Valores), y estándar en líneas rotativas de proveedor: el acreedor completa el pagaré con el saldo deudor real al momento de cobranza, con base en una cartilla de instrucciones de llenado.</p>
+    <p>La exposición máxima por aval está acotada al saldo deudor real al momento del incumplimiento, con tope contractual en el monto de la línea (US$200K) más intereses moratorios y costas.</p>
+    <p>El pagaré previamente firmado con Ingram Micro tiene la misma estructura de campos en blanco con cartilla de instrucciones.</p>
+
+    <h2>Anexo &middot; Pagaré íntegro</h2>
+    <div class="doc-buttons" style="margin-top: -4px;">
+      <a href="https://drive.google.com/file/d/1ufXgmq33CTVhJLo91EM56ShD6Y6ThFHV/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn">
+        <span class="doc-btn-icon">&darr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Pagaré solicitado por Nexsys</span>
+          <span class="doc-btn-sub">Documento a aprobar</span>
+        </span>
+      </a>
+      <a href="https://drive.google.com/file/d/1D_-coG_QM29Dd8Qrw6K6vxbVhEPMo90o/view?usp=sharing" target="_blank" rel="noopener" class="doc-btn ref">
+        <span class="doc-btn-icon">&nearr;</span>
+        <span class="doc-btn-content">
+          <span class="doc-btn-label">Ver pagaré de referencia (Ingram)</span>
+          <span class="doc-btn-sub">Firmado previamente</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="pagare">
+      <h4>PAGARÉ</h4>
+      <div class="pg-meta">N&deg; NP-026-07107 &middot; Lima, 06 de mayo de 2026</div>
+
+      <div class="pg-section">
+        <p>Por este Título Pagaré reconocemos adeudar y nos obligamos a pagar a <strong>NEXSYS DEL PERU S.R.L.</strong> con RUC N&deg;20470145901 a su orden el presente título, para su cobro, la suma de <strong>US$ [importe en blanco]</strong> (dólares americanos), importe recibido a mi/nuestra entera satisfacción.</p>
+      </div>
+
+      <div class="pg-section">
+        <div class="pg-section-title">Intereses y gastos</div>
+        <p>La suma adeudada a criterio del acreedor podrá generar tasa de interés compensatorio e interés moratorio equivalente al máximo permitido en el sistema financiero. Todos los gastos de vigencia y cobranza serán de cuenta de emitentes y garantes. La mora opera de forma automática por el transcurso del tiempo, sin necesidad de constitución formal.</p>
+      </div>
+
+      <div class="pg-section">
+        <div class="pg-section-title">Imputación de pagos</div>
+        <p>Todo pago parcial se imputará primero a intereses vencidos y el saldo al capital. Todo pago anticipado se imputará a la cuota de amortización de vencimiento más próximo. Domicilio de pago: domicilio fiscal de Nexsys del Perú S.R.L.</p>
+      </div>
+
+      <div class="pg-section">
+        <div class="pg-section-title">Cláusula de no protesto</div>
+        <p>Este título no está sujeto a protesto por falta de pago, salvo lo dispuesto en el artículo 81.2 de la Ley 27287.</p>
+      </div>
+
+      <div class="pg-section">
+        <div class="pg-section-title">Renuncia de domicilio</div>
+        <p>Los emitentes renuncian al fuero del domicilio, pudiendo Nexsys entablar la ejecución para su cobro donde lo tenga conveniente.</p>
+      </div>
+
+      <div class="pg-section">
+        <div class="pg-section-title">Emitente</div>
+        <p>
+          Razón Social: <strong>BALDE K S.A.C.</strong><br>
+          RUC: 20605530509<br>
+          Representante Legal: MONTENEGRO LEE RUBEN ANGEL &middot; DNI 10314652<br>
+          Domicilio: Av. Benavides Nro. 1238 Dpto. 404, Miraflores, Lima
+        </p>
+      </div>
+
+      <div class="pg-section">
+        <div class="pg-section-title">Garantía &middot; Aval solidario permanente</div>
+        <p>Los avales se constituyen como solidarios permanentes con el deudor y entre sí, renunciando expresamente al beneficio de excusión, garantizando el pago del pagaré y el cumplimiento de todas las obligaciones que representa. La garantía es solidaria, incondicional, irrevocable y por plazo indefinido, vigente hasta total cancelación. Los avales aceptan desde ahora las prórrogas y renovaciones que Nexsys conceda al avalado, sin necesidad de intervención posterior.</p>
+
+        <div class="aval-grid">
+          <div class="aval">
+            <strong>MONTENEGRO LEE RUBEN ANGEL</strong>
+            DNI 10314652<br>
+            Calle Malecón Armendariz 183 Dpto 1402, Miraflores, Lima
+          </div>
+          <div class="aval">
+            <strong>BIANCO ROA SANDRA ELBA</strong>
+            DNI 40325030<br>
+            Calle Malecón Armendariz 183 Dpto 1402, Miraflores, Lima
+          </div>
+          <div class="aval">
+            <strong>AROSAMENA BADANI MARIA ELENA</strong>
+            DNI 07870579<br>
+            De las Tapadas Mz C Lt 17B, La Encantada de Villa, Chorrillos, Lima
+          </div>
+          <div class="aval">
+            <strong>DE LAS CASAS FIGALLO EDUARDO JOSE</strong>
+            DNI 08799238<br>
+            Calle Montecarlo 240, Urb. Chacarilla, Santiago de Surco, Lima
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div id="form-container-full">
+        <h3>Decisión</h3>
+        <div class="form-question">&iquest;Firmará el pagaré con Nexsys del Perú por US$200K como aval solidario?</div>
+        <form class="decision-form">
+          <div class="vote-options">
+            <div class="vote-option">
+              <input type="radio" id="approve-full" name="vote" value="Apruebo" required>
+              <label for="approve-full" class="vote-approve">
+                <span class="vote-icon">&#10003;</span>
+                <span class="vote-label-text">Apruebo</span>
+              </label>
+            </div>
+            <div class="vote-option">
+              <input type="radio" id="reject-full" name="vote" value="No apruebo">
+              <label for="reject-full" class="vote-reject">
+                <span class="vote-icon">&#10007;</span>
+                <span class="vote-label-text">No apruebo</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-group-label" for="comments-full">Comentarios o condiciones</label>
+            <textarea id="comments-full" name="comments" placeholder="Opcional &middot; agregue cualquier comentario, condición o consideración a su voto"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-group-label" for="name-full">Nombre</label>
+              <select id="name-full" name="name" required>
+                <option value="" disabled selected>Seleccione su nombre</option>
+                <option value="Ruben Angel Montenegro Lee">Ruben Angel Montenegro Lee</option>
+                <option value="Sandra Elba Bianco Roa">Sandra Elba Bianco Roa</option>
+                <option value="María Elena Arosamena Badani">María Elena Arosamena Badani</option>
+                <option value="Eduardo José De Las Casas Figallo">Eduardo José De Las Casas Figallo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-group-label" for="date-full">Fecha</label>
+              <input type="date" id="date-full" name="date">
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Registrar voto</button>
+        </form>
+      </div>
+      <div class="success-msg">
+        <div class="check">&#10003;</div>
+        <h3>Voto registrado</h3>
+        <p class="success-detail"></p>
+        <p class="note">Su voto ha sido registrado exitosamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    BaldeCash S.A.C. &middot; Documento confidencial para uso exclusivo del directorio &middot; Mayo 2026
+  </div>
+
+</div>
+
+<script>
+  // Google Sheets integration
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKmb2pho9uYwg7or0wPN72hFMyTE1O0itvTNuQTXeS8aVHdNfNi7YikvbHWhCEOlNJ/exec';
+
+  var welcome = document.getElementById('welcome');
+  var versions = document.querySelectorAll('.version');
+  var welcomeButtons = document.querySelectorAll('.welcome-option');
+  var switcherButtons = document.querySelectorAll('.switcher-btn');
+
+  function showVersion(target) {
+    versions.forEach(function(v) { v.classList.remove('active'); });
+    document.getElementById('v-' + target).classList.add('active');
+    switcherButtons.forEach(function(b) {
+      b.classList.toggle('active', b.dataset.version === target);
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // Welcome screen -> show version + hide welcome
+  welcomeButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = btn.dataset.version;
+      showVersion(target);
+      welcome.classList.add('hidden');
+    });
+  });
+
+  // Switcher (after welcome) -> just switch version
+  switcherButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = btn.dataset.version;
+      showVersion(target);
+    });
+  });
+
+  // Set today's date on all date inputs
+  (function() {
+    var now = new Date();
+    var yyyy = now.getFullYear();
+    var mm = String(now.getMonth() + 1).padStart(2, '0');
+    var dd = String(now.getDate()).padStart(2, '0');
+    var today = yyyy + '-' + mm + '-' + dd;
+    document.querySelectorAll('input[type="date"]').forEach(function(input) {
+      input.value = today;
+    });
+  })();
+
+  // Wire up all decision forms with Google Apps Script
+  document.querySelectorAll('.decision-form').forEach(function(form) {
+    var formSection = form.closest('.form-section');
+    var formContainer = form.parentElement;
+    var successMsg = formSection.querySelector('.success-msg');
+    var successDetail = formSection.querySelector('.success-detail');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var formData = new FormData(form);
+      var vote = formData.get('vote');
+      var name = formData.get('name');
+      var comments = formData.get('comments');
+      var date = formData.get('date');
+
+      var submitBtn = form.querySelector('.submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      var payload = {
+        nombre: name,
+        voto: vote,
+        comentarios: comments || '',
+        fecha: date
+      };
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      })
+      .then(function() {
+        formContainer.style.display = 'none';
+        successMsg.style.display = 'block';
+        successDetail.innerHTML = '<strong>' + name + '</strong> &mdash; ' + vote + '<br>' + date;
+      })
+      .catch(function(err) {
+        alert('Error al enviar el voto. Por favor intente nuevamente.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Registrar voto';
+        console.error('Error:', err);
+      });
+    });
+  });
+</script>
 </body>
 </html>
